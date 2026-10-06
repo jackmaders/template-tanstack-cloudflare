@@ -29,7 +29,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 						"A focused workspace for keeping the things worth watching in sight.",
 				},
 				{
-					title: "Watchpoint — keep the important signal in sight",
+					title: "TanStack Start + Cloudflare Starter",
 				},
 			],
 			links: [

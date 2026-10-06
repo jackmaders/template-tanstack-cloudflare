@@ -28,5 +28,15 @@ export const auth = betterAuth({
 		},
 	},
 	secret: env.BETTER_AUTH_SECRET,
+	rateLimit: {
+		enabled: true,
+		window: 10,
+		max: 100,
+	},
+	advanced: {
+		ipAddress: {
+			ipAddressHeaders: ["cf-connecting-ip", "x-forwarded-for"],
+		},
+	},
 	plugins: [tanstackStartCookies()],
 });
