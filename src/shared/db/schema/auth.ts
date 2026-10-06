@@ -98,3 +98,12 @@ export const verification = sqliteTable(
 	},
 	(table) => [index("verification_identifier_idx").on(table.identifier)],
 );
+
+export const rateLimit = sqliteTable("rate_limit", {
+	id: text("id")
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
+	key: text("key").notNull().unique(),
+	count: integer("count").notNull(),
+	lastRequest: integer("last_request", { mode: "number" }).notNull(),
+});

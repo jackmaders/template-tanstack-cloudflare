@@ -1,2 +1,2 @@
-export { account, session, user, verification } from "./schema/auth";
+export { account, rateLimit, session, user, verification } from "./schema/auth";
 export { posts } from "./schema/posts";

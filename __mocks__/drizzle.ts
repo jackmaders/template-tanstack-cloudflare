@@ -74,6 +74,15 @@ export function createMockDatabase(): MockDatabaseSession {
 	`);
 
 	db.run(sql`
+		CREATE TABLE IF NOT EXISTS rate_limit (
+			id TEXT PRIMARY KEY,
+			key TEXT NOT NULL UNIQUE,
+			count INTEGER NOT NULL,
+			last_request INTEGER NOT NULL
+		)
+	`);
+
+	db.run(sql`
 		CREATE TABLE IF NOT EXISTS posts (
 			id INTEGER PRIMARY KEY AUTOINCREMENT,
 			name TEXT NOT NULL,
