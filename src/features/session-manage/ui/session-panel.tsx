@@ -39,12 +39,12 @@ export function SessionPanel() {
 			setIsSubmitting(true);
 
 			const formData = new FormData(event.currentTarget);
-			const email = String(formData.get("email") ?? "");
-			const password = String(formData.get("password") ?? "");
+			const email = String(formData.get("email"));
+			const password = String(formData.get("password"));
 
 			try {
 				if (mode === "sign-up") {
-					const name = String(formData.get("name") ?? "");
+					const name = String(formData.get("name"));
 					const result = await authClient.signUp.email({
 						callbackURL: "/",
 						email,

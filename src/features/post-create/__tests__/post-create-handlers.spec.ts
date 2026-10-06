@@ -1,0 +1,42 @@
+import { afterEach, describe, expect, test, vi } from "vitest";
+import { createMockDatabase } from "../../../../__mocks__/drizzle";
+import { postCreateHandler } from "../api/post-create-handlers";
+
+vi.mock("@/shared/db/index.server", () => ({ getDb: vi.fn() }));
+
+describe("postCreateHandler", () => {
+	const sessions: Array<ReturnType<typeof createMockDatabase>> = [];
+
+	afterEach(() => {
+		for (const session of sessions.splice(0)) {
+			session.close();
+		}
+	});
+
+	test("inserts a post and returns the created record", async () => {
+		const session = createMockDatabase();
+		sessions.push(session);
+
+		// biome-ignore lint/nursery/noUnsafeTypeAssertion: in-memory sqlite mock driver for test
+		const result = await postCreateHandler(
+			{ name: "Brand New Post" },
+			session.db as never,
+		);
+
+		expect(result).toMatchObject({
+			name: "Brand New Post",
+		});
+		expect(result.id).toBeDefined();
+		expect(result.createdAt).toBeDefined();
+	});
+
+	test("throws validation error for invalid input", async () => {
+		const session = createMockDatabase();
+		sessions.push(session);
+
+		await expect(
+			// biome-ignore lint/nursery/noUnsafeTypeAssertion: testing runtime validation
+			postCreateHandler({ name: 123 as never }, session.db as never),
+		).rejects.toThrow();
+	});
+});

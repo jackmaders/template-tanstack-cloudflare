@@ -27,4 +27,5 @@ todos.json
 # Lighthouse
 /.lighthouseci/
 
+coverage/
 stats.html

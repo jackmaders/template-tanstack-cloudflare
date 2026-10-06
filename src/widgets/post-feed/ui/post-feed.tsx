@@ -1,5 +1,4 @@
-import type { Post } from "@/entities/post";
-import { PostCard } from "@/entities/post";
+import { type Post, PostCard } from "@/entities/post";
 
 export function PostFeed({ posts }: { posts: Post[] }) {
 	if (posts.length === 0) {

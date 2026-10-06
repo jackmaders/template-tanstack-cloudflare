@@ -33,6 +33,26 @@ describe("PostCreateForm", () => {
 		expect(input).toHaveValue("");
 	});
 
+	test("displays an error message when submission fails", async () => {
+		const user = userEvent.setup();
+		vi.mocked(usePostCreateMutation().mutateAsync).mockRejectedValueOnce(
+			new Error("Failed"),
+		);
+
+		render(<PostCreateForm />);
+
+		const input = screen.getByLabelText("Post name");
+		await user.type(input, "Failed post");
+
+		await act(() =>
+			user.click(screen.getByRole("button", { name: "Add post" })),
+		);
+
+		expect(screen.getByRole("alert")).toHaveTextContent(
+			"Sign in to create a post.",
+		);
+	});
+
 	test("does not create a post when the name is blank", async () => {
 		const user = userEvent.setup();
 		render(<PostCreateForm />);
@@ -45,5 +65,17 @@ describe("PostCreateForm", () => {
 		);
 
 		expect(usePostCreateMutation().mutateAsync).not.toHaveBeenCalled();
+	});
+
+	test("renders pending state when mutation is pending", () => {
+		vi.mocked(usePostCreateMutation).mockReturnValueOnce({
+			isPending: true,
+			mutateAsync: vi.fn(),
+		} as never);
+
+		render(<PostCreateForm />);
+
+		const button = screen.getByRole("button", { name: "Adding..." });
+		expect(button).toBeDisabled();
 	});
 });
