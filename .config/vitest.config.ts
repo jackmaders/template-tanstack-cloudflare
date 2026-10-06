@@ -15,7 +15,10 @@ export default defineConfig({
 		environment: "happy-dom",
 		globals: true,
 		include: ["src/**/__tests__/*.spec.{ts,tsx}"],
-		setupFiles: ["@testing-library/jest-dom/vitest"],
+		setupFiles: [
+			"@testing-library/jest-dom/vitest",
+			new URL("../__mocks__/react-start.ts", import.meta.url).pathname,
+		],
 		coverage: {
 			provider: "v8",
 			reporter: ["text", "json", "html"],
@@ -30,7 +33,6 @@ export default defineConfig({
 				"**/__tests__/**",
 				"**/__mocks__/**",
 				"**/index*.ts",
-				"**/*.functions.ts",
 				"**/*-lazy.tsx",
 				"**/*-types.ts",
 				"src/shared/db/**",
