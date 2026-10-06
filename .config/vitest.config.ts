@@ -33,7 +33,6 @@ export default defineConfig({
 				"**/__tests__/**",
 				"**/__mocks__/**",
 				"**/index*.ts",
-				"**/*-lazy.tsx",
 				"src/shared/db/**",
 				"src/shared/auth/**",
 			],
