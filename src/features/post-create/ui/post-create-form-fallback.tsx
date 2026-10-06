@@ -1,11 +1,6 @@
-import type { FormEvent } from "react";
 import { Button } from "@/shared/ui/button";
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
-
-function handleSubmit(event: FormEvent<HTMLFormElement>) {
-	event.preventDefault();
-}
 
 export function PostCreateFormFallback() {
 	return (
@@ -13,7 +8,7 @@ export function PostCreateFormFallback() {
 			aria-busy="true"
 			aria-disabled="true"
 			className="flex flex-col gap-3 sm:flex-row sm:items-end"
-			onSubmit={handleSubmit}
+			onSubmit={(event) => event.preventDefault()}
 		>
 			<div className="grid flex-1 gap-2">
 				<Label className="opacity-70">Post name</Label>
