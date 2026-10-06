@@ -8,7 +8,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  BETTER_AUTH_SECRET: watchpoint-ci-local-only-secret-value
+  BETTER_AUTH_SECRET: template-ci-local-only-secret-value
 
 jobs:
   unit-tests:

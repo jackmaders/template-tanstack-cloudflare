@@ -3,9 +3,7 @@ import { PostCard } from "@/entities/post";
 
 export function PostFeed({ posts }: { posts: Post[] }) {
 	if (posts.length === 0) {
-		return (
-			<p className="mt-4 text-muted-foreground text-sm">No watchpoints yet.</p>
-		);
+		return <p className="mt-4 text-muted-foreground text-sm">No posts yet.</p>;
 	}
 
 	return (

@@ -93,13 +93,13 @@ function RootNotFound() {
 				404 — Page not found
 			</h1>
 			<p className="mt-3 max-w-md text-muted-foreground">
-				That route is outside the current watchpoint.
+				That route could not be found.
 			</p>
 			<Link
 				className="mt-6 text-primary text-sm underline-offset-4 hover:underline"
 				to="/"
 			>
-				Return to the signal desk
+				Return home
 			</Link>
 		</div>
 	);

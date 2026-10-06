@@ -107,7 +107,7 @@ export function SessionPanel() {
 	return (
 		<Card className="h-full min-h-112">
 			<CardHeader>
-				<CardDescription>Access the watchpoint</CardDescription>
+				<CardDescription>Authentication</CardDescription>
 				<CardTitle className="mt-1">
 					{mode === "sign-in" ? "Welcome back" : "Create an operator account"}
 				</CardTitle>

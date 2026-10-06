@@ -9,7 +9,7 @@ test("authenticates users and protects server functions", async ({ page }) => {
 
 	await page.goto("/");
 	await page.locator('html[data-hydrated="true"]').waitFor();
-	await expect(page.getByText("Access the watchpoint")).toBeVisible();
+	await expect(page.getByText("Authentication")).toBeVisible();
 
 	await page
 		.getByRole("button", { name: "Need an account? Create one" })
@@ -48,16 +48,14 @@ test("authenticates users and protects server functions", async ({ page }) => {
 	await page.getByRole("button", { name: "Sign out" }).click();
 	const signOutResponse = await signOutResponsePromise;
 	expect(signOutResponse.ok()).toBe(true);
-	await expect(page.getByText("Access the watchpoint")).toBeVisible();
+	await expect(page.getByText("Authentication")).toBeVisible();
 
 	const signedOutSession = await readSession(page);
 	expect(signedOutSession).toBeNull();
 
 	await page.getByLabel("Post name").fill(anonymousPostName);
 	await page.getByRole("button", { name: "Add post" }).click();
-	await expect(page.getByRole("alert")).toHaveText(
-		"Sign in to add a watchpoint.",
-	);
+	await expect(page.getByRole("alert")).toHaveText("Sign in to create a post.");
 	await expect(page.getByText(anonymousPostName, { exact: true })).toHaveCount(
 		0,
 	);

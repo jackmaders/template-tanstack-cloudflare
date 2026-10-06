@@ -24,7 +24,7 @@ export function PostCreateForm() {
 				await mutateAsync({ name });
 				form.reset();
 			} catch {
-				setError("Sign in to add a watchpoint.");
+				setError("Sign in to create a post.");
 			}
 		},
 		[mutateAsync],
