@@ -1,0 +1,31 @@
+name: 🤖 PR Agent Review
+
+on:
+  pull_request:
+    types: [opened, reopened, ready_for_review, review_requested]
+
+concurrency:
+  group: pr-agent-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  review:
+    name: 🧠 Review Pull Request
+    if: ${{ github.event.sender.type != 'Bot' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      issues: write
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: 🛒 Checkout Source Code
+        uses: actions/checkout@v5
+
+      - name: Run PR Agent review
+        uses: the-pr-agent/pr-agent@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GOOGLE_AI_STUDIO.GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          CONFIG.EXTRA_CONFIG_URL: "${{ github.workspace }}/.config/pr-agent.toml"

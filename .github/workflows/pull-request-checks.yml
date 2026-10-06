@@ -1,0 +1,165 @@
+name: 🔍 PR Quality Checks
+
+on:
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  BETTER_AUTH_SECRET: watchpoint-ci-local-only-secret-value
+
+jobs:
+  unit-tests:
+    name: 🧪 Run Unit Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: 🛒 Checkout Source Code
+        uses: actions/checkout@v5
+
+      - name: ⚡ Setup Bun Environment
+        uses: ./.github/actions/setup-bun
+
+      - name: 🧪 Run Unit Tests
+        run: bun run test
+
+  check-build:
+    name: 📦 Verify Build Health
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: 🛒 Checkout Source Code
+        uses: actions/checkout@v5
+
+      - name: ⚡ Setup Bun Environment
+        uses: ./.github/actions/setup-bun
+
+      - name: 🏗️ Build Application
+        run: bun run build
+
+      - name: 🔀 Verify Route Tree
+        run: git diff --exit-code **/routeTree.gen.ts
+
+      - name: 🧩 Verify Chunk Sizes
+        run: bun run check:chunk-size
+
+      - name: 📦 Verify Worker Deployment
+        run: bun run deploy:dry-run
+
+      - name: 📤 Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: dist/
+          retention-days: 1
+
+  artifact-drift:
+    name: 🛡️ Prevent Artifact Drift
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: 🛒 Checkout Source Code
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: ⚡ Setup Bun Environment
+        uses: ./.github/actions/setup-bun
+
+      - name: ☁️ Verify Cloudflare Types
+        run: bun run cf:typegen && git diff --exit-code -- src/cloudflare-env.d.ts
+
+      - name: 🗃️ Verify Database Migrations
+        run: |
+          bun run db:generate
+          git diff --exit-code -- drizzle
+          test -z "$(git ls-files --others --exclude-standard -- drizzle)"
+
+      - name: 🔒 Enforce Single Migration Per PR
+        run: |
+          NEW_MIGRATIONS=$(git diff --name-only --diff-filter=A "origin/${{ github.base_ref || 'main' }}...HEAD" -- "drizzle/**/*.sql" | wc -l)
+          [ "$NEW_MIGRATIONS" -le 1 ] || { echo "::error::PR introduces $NEW_MIGRATIONS migrations (max 1 allowed)."; exit 1; }
+
+  browser-tests:
+    name: 🎭 Run Browser Tests
+    needs: [check-build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+
+    steps:
+      - name: 🛒 Checkout Source Code
+        uses: actions/checkout@v5
+
+      - name: ⚡ Setup Bun Environment
+        uses: ./.github/actions/setup-bun
+
+      - name: 📥 Download Build Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-output
+          path: dist/
+
+      - name: 🎭 Run Browser Tests
+        uses: ./.github/actions/run-playwright
+        with:
+          browser: ${{ matrix.browser }}
+          use-preview: "true"
+          report-name: playwright-report-${{ matrix.browser }}
+
+  lighthouse:
+    name: 🔦 Run Lighthouse Check
+    needs: [check-build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: 🛒 Checkout Source Code
+        uses: actions/checkout@v5
+
+      - name: ⚡ Setup Bun Environment
+        uses: ./.github/actions/setup-bun
+
+      - name: 📥 Download Build Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-output
+          path: dist/
+
+      - name: 🔦 Run Lighthouse Check
+        uses: ./.github/actions/run-lighthouse
+        with:
+          number-of-runs: "1"
+
+  code-quality:
+    name: ✨ Check Code Quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: 🛒 Checkout Source Code
+        uses: actions/checkout@v5
+
+      - name: ⚡ Setup Bun Environment
+        uses: ./.github/actions/setup-bun
+
+      - name: ✨ Check Code Lint & Format
+        run: bun run check:ci
+
+      - name: 🧱 Check Feature-Sliced Architecture
+        run: bun run check:architecture
+
+      - name: 🧭 Check Dependency Graph
+        run: bun run check:knip
+
+      - name: 🦺 Check Type Safety
+        run: bun run check:types

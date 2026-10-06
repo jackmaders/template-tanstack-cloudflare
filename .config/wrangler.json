@@ -1,0 +1,24 @@
+{
+	"$schema": "../node_modules/wrangler/config-schema.json",
+	"name": "template-tanstack-start-cloudflare",
+	"compatibility_date": "2026-09-19",
+	"compatibility_flags": ["nodejs_compat"],
+	"main": "@tanstack/react-start/server-entry",
+	"observability": { "enabled": true },
+	"workers_dev": true,
+	"vars": {
+		"BETTER_AUTH_URL": "http://localhost:5173"
+	},
+	"secrets": {
+		"required": ["BETTER_AUTH_SECRET"]
+	},
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_id": "YOUR_D1_DATABASE_ID",
+			"database_name": "starter-db",
+			"migrations_dir": "../drizzle",
+			"migrations_pattern": "../drizzle/*/migration.sql"
+		}
+	]
+}
