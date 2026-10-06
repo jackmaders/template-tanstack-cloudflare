@@ -49,6 +49,7 @@ const config: KnipConfig = {
 	},
 
 	biome: { config: [".config/biome.json"] },
+	commitlint: { config: [".config/commitlint.config.mjs"] },
 	drizzle: { config: [".config/drizzle.config.ts"] },
 	lefthook: { config: [".config/lefthook.yml"] },
 	playwright: { config: [".config/playwright.config.ts"] },

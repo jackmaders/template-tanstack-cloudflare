@@ -15,4 +15,4 @@ pre-commit:
 commit-msg:
   commands:
     commitlint:
-      run: bun commitlint --edit {1} --default-config
+      run: bun commitlint --edit {1} --config .config/commitlint.config.mjs
