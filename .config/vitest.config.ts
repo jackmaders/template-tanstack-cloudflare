@@ -35,9 +35,7 @@ export default defineConfig({
 				"**/index*.ts",
 				"**/*-lazy.tsx",
 				"src/shared/db/**",
-				"src/shared/auth/auth-*",
-				"src/shared/auth/auth.*",
-				"src/shared/lib/utils.ts",
+				"src/shared/auth/**",
 				"src/shared/**/*middleware.ts",
 			],
 			thresholds: {
