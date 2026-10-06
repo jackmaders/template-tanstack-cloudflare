@@ -76,7 +76,8 @@ export function createMockDatabase(): MockDatabaseSession {
 	db.run(sql`
 		CREATE TABLE IF NOT EXISTS posts (
 			id INTEGER PRIMARY KEY AUTOINCREMENT,
-			name TEXT NOT NULL
+			name TEXT NOT NULL,
+			created_at INTEGER NOT NULL DEFAULT (cast(unixepoch('subsecond') * 1000 as integer))
 		)
 	`);
 
