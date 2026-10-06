@@ -22,17 +22,14 @@ export default defineConfig({
 		coverage: {
 			provider: "v8",
 			reporter: ["text", "json", "html"],
-			include: [
-				"src/entities/**/*.{ts,tsx}",
-				"src/features/**/*.{ts,tsx}",
-				"src/widgets/**/*.{ts,tsx}",
-				"src/shared/**/*.{ts,tsx}",
-			],
+			include: ["src/**/*.{ts,tsx}"],
 			exclude: [
 				"**/*.spec.{ts,tsx}",
 				"**/__tests__/**",
 				"**/__mocks__/**",
 				"**/index*.ts",
+				"src/app/**",
+				"src/cloudflare-env.d.ts",
 				"src/shared/db/**",
 				"src/shared/auth/**",
 			],
