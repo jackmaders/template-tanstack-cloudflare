@@ -60,24 +60,21 @@ export const test = baseTest.extend({
 
 		await use(page);
 
-		expect(
+		const diagnostics = JSON.stringify(
 			{
-				browserErrors,
 				pageURL: page.url(),
 				sessionRequests,
 				sessionRequestHeaders,
 				sessionResponses,
 				sessionRequestFailures,
 			},
-			`Browser errors in "${testInfo.title}"`,
-		).toEqual({
-			browserErrors: [],
-			pageURL: page.url(),
-			sessionRequests,
-			sessionRequestHeaders,
-			sessionResponses,
-			sessionRequestFailures,
-		});
+			null,
+			2,
+		);
+		expect(
+			browserErrors,
+			`Browser errors in "${testInfo.title}"\n${diagnostics}`,
+		).toEqual([]);
 	},
 });
 
