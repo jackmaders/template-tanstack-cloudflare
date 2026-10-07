@@ -1,12 +1,27 @@
 import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, test, vi } from "vitest";
+import { beforeEach, describe, expect, test, vi } from "vitest";
 import { usePostCreateMutation } from "../api/use-post-create-mutation";
 import { PostCreateForm } from "../ui/post-create-form";
+
+const authState = vi.hoisted(() => ({ isAuthenticated: true }));
+
+vi.mock("@/shared/auth", () => ({
+	authClient: {
+		useSession: () => ({
+			data: authState.isAuthenticated ? { user: { id: "user-1" } } : null,
+			isPending: false,
+		}),
+	},
+}));
 
 vi.mock("../api/use-post-create-mutation");
 
 describe("PostCreateForm", () => {
+	beforeEach(() => {
+		authState.isAuthenticated = true;
+	});
+
 	test("renders the post name field and submit button", () => {
 		render(<PostCreateForm />);
 
@@ -51,6 +66,20 @@ describe("PostCreateForm", () => {
 		expect(screen.getByRole("alert")).toHaveTextContent(
 			"Sign in to create a post.",
 		);
+	});
+
+	test("prompts anonymous users without calling the server function", async () => {
+		const user = userEvent.setup();
+		authState.isAuthenticated = false;
+		render(<PostCreateForm />);
+
+		await user.type(screen.getByLabelText("Post name"), "Anonymous post");
+		await user.click(screen.getByRole("button", { name: "Add post" }));
+
+		expect(screen.getByRole("alert")).toHaveTextContent(
+			"Sign in to create a post.",
+		);
+		expect(usePostCreateMutation().mutateAsync).not.toHaveBeenCalled();
 	});
 
 	test("does not create a post when the name is blank", async () => {

@@ -1,5 +1,6 @@
 import type { SubmitEvent } from "react";
 import { useCallback, useId, useState } from "react";
+import { authClient } from "@/shared/auth";
 import { Button } from "@/shared/ui/button";
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
@@ -7,6 +8,9 @@ import { usePostCreateMutation } from "../api/use-post-create-mutation";
 
 export function PostCreateForm() {
 	const postNameId = useId();
+	const { data: session, isPending: isSessionPending } =
+		authClient.useSession();
+	const isAuthenticated = Boolean(session?.user);
 	const { isPending, mutateAsync } = usePostCreateMutation();
 	const [error, setError] = useState<string | null>(null);
 
@@ -19,6 +23,15 @@ export function PostCreateForm() {
 				return;
 			}
 
+			if (isSessionPending) {
+				return;
+			}
+
+			if (!isAuthenticated) {
+				setError("Sign in to create a post.");
+				return;
+			}
+
 			setError(null);
 			try {
 				await mutateAsync({ name });
@@ -27,7 +40,7 @@ export function PostCreateForm() {
 				setError("Sign in to create a post.");
 			}
 		},
-		[mutateAsync],
+		[isAuthenticated, isSessionPending, mutateAsync],
 	);
 
 	return (
@@ -37,7 +50,7 @@ export function PostCreateForm() {
 					<Label htmlFor={postNameId}>Post name</Label>
 					<Input id={postNameId} name="name" placeholder="Post name" required />
 				</div>
-				<Button disabled={isPending} type="submit">
+				<Button disabled={isPending || isSessionPending} type="submit">
 					{isPending ? "Adding..." : "Add post"}
 				</Button>
 			</form>

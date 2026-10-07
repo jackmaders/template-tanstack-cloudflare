@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 import { setTestClientIp } from "./test-client";
 
 const postsCountPattern = /^Recent posts \((\d+)\)$/;
