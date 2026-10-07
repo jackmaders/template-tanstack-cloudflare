@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import { useId } from "react";
 import { describe, expect, test } from "vitest";
 import { Badge } from "../badge";
 import { Button } from "../button";
@@ -43,12 +44,7 @@ describe("UI Primitives", () => {
 	});
 
 	test("Input and Label render together", () => {
-		render(
-			<div>
-				<Label htmlFor="test-input">Test Field</Label>
-				<Input id="test-input" placeholder="Type here" />
-			</div>,
-		);
+		render(<LabelledInput />);
 
 		expect(screen.getByLabelText("Test Field")).toBeInTheDocument();
 	});
@@ -58,3 +54,15 @@ describe("UI Primitives", () => {
 		expect(screen.getByTestId("separator")).toBeInTheDocument();
 	});
 });
+
+// biome-ignore lint/style/useComponentExportOnlyModules: this component is a local test fixture.
+function LabelledInput() {
+	const inputId = useId();
+
+	return (
+		<div>
+			<Label htmlFor={inputId}>Test Field</Label>
+			<Input id={inputId} placeholder="Type here" />
+		</div>
+	);
+}

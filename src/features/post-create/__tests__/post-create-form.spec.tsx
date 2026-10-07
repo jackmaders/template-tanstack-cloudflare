@@ -71,6 +71,7 @@ describe("PostCreateForm", () => {
 		vi.mocked(usePostCreateMutation).mockReturnValueOnce({
 			isPending: true,
 			mutateAsync: vi.fn(),
+			// biome-ignore lint/nursery/noUnsafeTypeAssertion: this test only needs the pending fields from the mutation result.
 		} as never);
 
 		render(<PostCreateForm />);

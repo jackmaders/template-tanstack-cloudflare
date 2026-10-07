@@ -1,6 +1,7 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { postListQueryOptions } from "@/entities/post";
 import { PostCreateForm } from "@/features/post-create/index.async";
+import { SessionPanel } from "@/features/session-manage/index.async";
 import {
 	Card,
 	CardContent,
@@ -15,7 +16,7 @@ export function HomePage() {
 	const { data: posts } = useSuspenseQuery(postListQueryOptions);
 
 	return (
-		<main className="mx-auto max-w-2xl space-y-8 p-6">
+		<main className="mx-auto max-w-4xl space-y-8 p-6">
 			<header className="space-y-2">
 				<h1 className="font-semibold text-2xl">Build fast on the edge.</h1>
 				<p className="text-muted-foreground">
@@ -23,14 +24,17 @@ export function HomePage() {
 				</p>
 			</header>
 
-			<section className="space-y-2">
-				<h2 className="font-medium">Included</h2>
-				<ul className="list-inside list-disc space-y-1 text-sm">
-					<li>Cloudflare D1</li>
-					<li>Better Auth</li>
-					<li>Drizzle ORM</li>
-					<li>shadcn/ui</li>
-				</ul>
+			<section className="grid gap-6 md:grid-cols-2">
+				<div className="space-y-2">
+					<h2 className="font-medium">Included</h2>
+					<ul className="list-inside list-disc space-y-1 text-sm">
+						<li>Cloudflare D1</li>
+						<li>Better Auth</li>
+						<li>Drizzle ORM</li>
+						<li>shadcn/ui</li>
+					</ul>
+				</div>
+				<SessionPanel />
 			</section>
 
 			<Card>

@@ -3,6 +3,7 @@ import { describe, expect, test, vi } from "vitest";
 import { PostCreateForm } from "../ui/post-create-form-lazy";
 
 vi.mock("../ui/post-create-form", () => ({
+	// biome-ignore lint/style/useNamingConvention: the mock must match the component export.
 	PostCreateForm: () => (
 		<div data-testid="real-post-create-form">Loaded Post Create Form</div>
 	),

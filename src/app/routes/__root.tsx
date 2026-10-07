@@ -30,6 +30,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 					title: "TanStack Start + Cloudflare Starter",
 				},
 			],
+			links: [
+				{
+					rel: "icon",
+					href: "/favicon.svg",
+					type: "image/svg+xml",
+				},
+			],
 		}),
 		shellComponent: RootDocument,
 		notFoundComponent: NotFoundPage,
