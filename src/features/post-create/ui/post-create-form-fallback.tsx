@@ -7,17 +7,12 @@ export function PostCreateFormFallback() {
 		<form
 			aria-busy="true"
 			aria-disabled="true"
-			className="flex flex-col gap-3 sm:flex-row sm:items-end"
+			className="grid gap-3"
 			onSubmit={(event) => event.preventDefault()}
 		>
-			<div className="grid flex-1 gap-2">
-				<Label className="opacity-70">Post name</Label>
-				<Input
-					disabled
-					name="name"
-					placeholder="A signal worth keeping"
-					readOnly
-				/>
+			<div className="grid gap-2">
+				<Label>Post name</Label>
+				<Input disabled name="name" placeholder="Post name" readOnly />
 			</div>
 			<Button disabled type="button">
 				Add post

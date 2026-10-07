@@ -32,18 +32,10 @@ export function PostCreateForm() {
 
 	return (
 		<>
-			<form
-				className="flex flex-col gap-3 sm:flex-row sm:items-end"
-				onSubmit={handleSubmit}
-			>
-				<div className="grid flex-1 gap-2">
+			<form className="grid gap-3" onSubmit={handleSubmit}>
+				<div className="grid gap-2">
 					<Label htmlFor={postNameId}>Post name</Label>
-					<Input
-						id={postNameId}
-						name="name"
-						placeholder="A signal worth keeping"
-						required
-					/>
+					<Input id={postNameId} name="name" placeholder="Post name" required />
 				</div>
 				<Button disabled={isPending} type="submit">
 					{isPending ? "Adding..." : "Add post"}

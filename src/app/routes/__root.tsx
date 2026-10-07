@@ -24,18 +24,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 				},
 				{
 					name: "description",
-					content:
-						"A focused workspace for keeping the things worth watching in sight.",
+					content: "A minimal TanStack Start and Cloudflare template.",
 				},
 				{
 					title: "TanStack Start + Cloudflare Starter",
-				},
-			],
-			links: [
-				{
-					rel: "icon",
-					href: "/favicon.svg",
-					type: "image/svg+xml",
 				},
 			],
 		}),
