@@ -50,7 +50,6 @@ export function SessionPanel({ isPending, user }: SessionPanelProps) {
 				if (mode === "sign-up") {
 					const name = String(formData.get("name"));
 					const result = await authClient.signUp.email({
-						callbackURL: "/",
 						email,
 						name,
 						password,
@@ -61,7 +60,6 @@ export function SessionPanel({ isPending, user }: SessionPanelProps) {
 					}
 				} else {
 					const result = await authClient.signIn.email({
-						callbackURL: "/",
 						email,
 						password,
 					});
