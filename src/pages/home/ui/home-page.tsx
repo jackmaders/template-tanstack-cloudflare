@@ -2,6 +2,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { postListQueryOptions } from "@/entities/post";
 import { PostCreateForm } from "@/features/post-create/index.async";
 import { SessionPanel } from "@/features/session-manage/index.async";
+import { authClient } from "@/shared/auth";
 import {
 	Card,
 	CardContent,
@@ -14,6 +15,9 @@ import { PostFeed } from "@/widgets/post-feed";
 
 export function HomePage() {
 	const { data: posts } = useSuspenseQuery(postListQueryOptions);
+	const { data: session, isPending: isSessionPending } =
+		authClient.useSession();
+	const user = session?.user;
 
 	return (
 		<main className="mx-auto max-w-4xl space-y-8 p-6">
@@ -34,7 +38,7 @@ export function HomePage() {
 						<li>shadcn/ui</li>
 					</ul>
 				</div>
-				<SessionPanel />
+				<SessionPanel isPending={isSessionPending} user={user} />
 			</section>
 
 			<Card>
@@ -45,7 +49,10 @@ export function HomePage() {
 					</CardDescription>
 				</CardHeader>
 				<CardContent className="space-y-4">
-					<PostCreateForm />
+					<PostCreateForm
+						isAuthenticated={Boolean(user)}
+						isSessionPending={isSessionPending}
+					/>
 					<Separator />
 					<section className="space-y-2">
 						<h2 className="font-medium text-sm">

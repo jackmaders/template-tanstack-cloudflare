@@ -17,8 +17,12 @@ import { SessionPanelFallback } from "./session-panel-fallback";
 
 type AuthMode = "sign-in" | "sign-up";
 
-export function SessionPanel() {
-	const { data: session, isPending } = authClient.useSession();
+interface SessionPanelProps {
+	isPending: boolean;
+	user?: { email: string; name: string };
+}
+
+export function SessionPanel({ isPending, user }: SessionPanelProps) {
 	const fieldId = useId();
 	const [mode, setMode] = useState<AuthMode>("sign-in");
 	const [error, setError] = useState<string | null>(null);
@@ -81,20 +85,20 @@ export function SessionPanel() {
 		return <SessionPanelFallback className="h-full" />;
 	}
 
-	if (session?.user) {
+	if (user) {
 		return (
 			<Card className="h-full min-h-112">
 				<CardHeader>
 					<div className="flex items-center justify-between gap-4">
 						<div>
 							<CardDescription>Current operator</CardDescription>
-							<CardTitle className="mt-1">{session.user.name}</CardTitle>
+							<CardTitle className="mt-1">{user.name}</CardTitle>
 						</div>
 						<Badge variant="secondary">Signed in</Badge>
 					</div>
 				</CardHeader>
 				<CardContent className="space-y-4">
-					<p className="text-muted-foreground text-sm">{session.user.email}</p>
+					<p className="text-muted-foreground text-sm">{user.email}</p>
 					<Separator />
 					<Button className="w-full" onClick={handleSignOut} variant="outline">
 						Sign out

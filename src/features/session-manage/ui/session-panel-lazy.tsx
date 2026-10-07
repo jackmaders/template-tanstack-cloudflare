@@ -9,14 +9,18 @@ const LazySessionPanel = lazy(() =>
 
 export interface SessionPanelProps {
 	fallback?: ReactNode;
+	isPending: boolean;
+	user?: { email: string; name: string };
 }
 
 export function SessionPanel({
+	isPending,
 	fallback = <SessionPanelFallback />,
-}: SessionPanelProps = {}) {
+	user,
+}: SessionPanelProps) {
 	return (
 		<Suspense fallback={fallback}>
-			<LazySessionPanel />
+			<LazySessionPanel isPending={isPending} user={user} />
 		</Suspense>
 	);
 }

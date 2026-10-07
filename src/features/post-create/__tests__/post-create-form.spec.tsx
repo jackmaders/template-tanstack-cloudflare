@@ -1,29 +1,14 @@
 import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, test, vi } from "vitest";
+import { describe, expect, test, vi } from "vitest";
 import { usePostCreateMutation } from "../api/use-post-create-mutation";
 import { PostCreateForm } from "../ui/post-create-form";
-
-const authState = vi.hoisted(() => ({ isAuthenticated: true }));
-
-vi.mock("@/shared/auth", () => ({
-	authClient: {
-		useSession: () => ({
-			data: authState.isAuthenticated ? { user: { id: "user-1" } } : null,
-			isPending: false,
-		}),
-	},
-}));
 
 vi.mock("../api/use-post-create-mutation");
 
 describe("PostCreateForm", () => {
-	beforeEach(() => {
-		authState.isAuthenticated = true;
-	});
-
 	test("renders the post name field and submit button", () => {
-		render(<PostCreateForm />);
+		renderPostCreateForm();
 
 		expect(screen.getByLabelText("Post name")).toBeInTheDocument();
 		expect(
@@ -33,7 +18,7 @@ describe("PostCreateForm", () => {
 
 	test("creates a post and clears the form", async () => {
 		const user = userEvent.setup();
-		render(<PostCreateForm />);
+		renderPostCreateForm();
 
 		const input = screen.getByLabelText("Post name");
 		await user.type(input, "First post");
@@ -54,7 +39,7 @@ describe("PostCreateForm", () => {
 			new Error("Failed"),
 		);
 
-		render(<PostCreateForm />);
+		renderPostCreateForm();
 
 		const input = screen.getByLabelText("Post name");
 		await user.type(input, "Failed post");
@@ -70,8 +55,7 @@ describe("PostCreateForm", () => {
 
 	test("prompts anonymous users without calling the server function", async () => {
 		const user = userEvent.setup();
-		authState.isAuthenticated = false;
-		render(<PostCreateForm />);
+		renderPostCreateForm({ isAuthenticated: false });
 
 		await user.type(screen.getByLabelText("Post name"), "Anonymous post");
 		await user.click(screen.getByRole("button", { name: "Add post" }));
@@ -84,7 +68,7 @@ describe("PostCreateForm", () => {
 
 	test("does not create a post when the name is blank", async () => {
 		const user = userEvent.setup();
-		render(<PostCreateForm />);
+		renderPostCreateForm();
 
 		const input = screen.getByLabelText("Post name");
 		await user.type(input, "   ");
@@ -103,9 +87,21 @@ describe("PostCreateForm", () => {
 			// biome-ignore lint/nursery/noUnsafeTypeAssertion: this test only needs the pending fields from the mutation result.
 		} as never);
 
-		render(<PostCreateForm />);
+		renderPostCreateForm();
 
 		const button = screen.getByRole("button", { name: "Adding..." });
 		expect(button).toBeDisabled();
 	});
 });
+
+function renderPostCreateForm({
+	isAuthenticated = true,
+	isSessionPending = false,
+}: Partial<{ isAuthenticated: boolean; isSessionPending: boolean }> = {}) {
+	return render(
+		<PostCreateForm
+			isAuthenticated={isAuthenticated}
+			isSessionPending={isSessionPending}
+		/>,
+	);
+}

@@ -17,6 +17,12 @@ vi.mock("@tanstack/react-query", async (importOriginal) => {
 	};
 });
 
+vi.mock("@/shared/auth", () => ({
+	authClient: {
+		useSession: () => ({ data: null, isPending: false }),
+	},
+}));
+
 vi.mock("@/features/post-create/index.async", () => ({
 	// biome-ignore lint/style/useNamingConvention: the mock must match the component export.
 	PostCreateForm: () => <div data-testid="mock-post-create-form" />,

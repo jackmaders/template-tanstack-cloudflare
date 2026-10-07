@@ -1,16 +1,20 @@
 import type { SubmitEvent } from "react";
 import { useCallback, useId, useState } from "react";
-import { authClient } from "@/shared/auth";
 import { Button } from "@/shared/ui/button";
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
 import { usePostCreateMutation } from "../api/use-post-create-mutation";
 
-export function PostCreateForm() {
+export interface PostCreateFormProps {
+	isAuthenticated: boolean;
+	isSessionPending: boolean;
+}
+
+export function PostCreateForm({
+	isAuthenticated,
+	isSessionPending,
+}: PostCreateFormProps) {
 	const postNameId = useId();
-	const { data: session, isPending: isSessionPending } =
-		authClient.useSession();
-	const isAuthenticated = Boolean(session?.user);
 	const { isPending, mutateAsync } = usePostCreateMutation();
 	const [error, setError] = useState<string | null>(null);
 
