@@ -3,7 +3,6 @@ import { Activity, Database, ShieldCheck, Sparkles } from "lucide-react";
 import type { ReactNode } from "react";
 import { postListQueryOptions } from "@/entities/post";
 import { PostCreateForm } from "@/features/post-create/index.async";
-import { SessionPanel } from "@/features/session-manage/index.async";
 import { Badge } from "@/shared/ui/badge";
 import {
 	Card,
@@ -61,9 +60,6 @@ export function HomePage() {
 							<Metric label="Database" value="Cloudflare D1" />
 							<Metric label="Auth" value="Better Auth" />
 						</div>
-					</div>
-					<div className="lg:col-span-2">
-						<SessionPanel />
 					</div>
 				</section>
 

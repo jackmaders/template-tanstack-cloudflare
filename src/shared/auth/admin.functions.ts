@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { adminMiddleware } from "./admin-middleware";
 
-export const requireAdminServerFn = createServerFn({ method: "GET" })
+export const ensureAdminAccessServerFn = createServerFn({ method: "GET" })
 	.middleware([adminMiddleware])
-	.handler(({ context }) => context.session);
+	.handler(() => undefined);

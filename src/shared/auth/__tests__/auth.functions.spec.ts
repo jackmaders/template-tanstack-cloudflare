@@ -1,6 +1,6 @@
-import { describe, expect, test, vi } from "vitest";
 import { getRequestHeaders } from "@tanstack/react-start/server";
-import { ensureSession } from "../auth.functions";
+import { describe, expect, test, vi } from "vitest";
+import { getSession } from "../auth.functions";
 import { auth } from "../auth.server";
 
 vi.mock("@tanstack/react-start/server", () => ({
@@ -15,7 +15,7 @@ vi.mock("../auth.server", () => ({
 	},
 }));
 
-describe("ensureSession", () => {
+describe("getSession", () => {
 	test("returns session when session exists", async () => {
 		const mockSession = {
 			user: { id: "u1", name: "User 1" },
@@ -23,14 +23,14 @@ describe("ensureSession", () => {
 		};
 		vi.mocked(auth.api.getSession).mockResolvedValueOnce(mockSession as never);
 
-		const result = await ensureSession();
+		const result = await getSession();
 		expect(getRequestHeaders).toHaveBeenCalled();
 		expect(result).toEqual(mockSession);
 	});
 
-	test("throws Unauthorized error when session does not exist", async () => {
+	test("returns null when session does not exist", async () => {
 		vi.mocked(auth.api.getSession).mockResolvedValueOnce(null as never);
 
-		await expect(ensureSession()).rejects.toThrow("Unauthorized");
+		await expect(getSession()).resolves.toBeNull();
 	});
 });

@@ -18,12 +18,11 @@ A production-ready full-stack template powered by **TanStack Start**, **Cloudfla
 ## 🚀 Getting Started
 
 ### 1. Prerequisites
+
 - [Bun](https://bun.sh/) (v1.2+)
 - Cloudflare account with Wrangler CLI configured
 
 ### 2. Setup
-
-Clone the repo or click **Use this template**:
 
 ```bash
 # Install dependencies
@@ -31,24 +30,9 @@ bun install
 
 # Copy environment variables
 cp .config/.dev.vars.example .config/.dev.vars
-```
 
-Generate a random secret for `BETTER_AUTH_SECRET`:
-```bash
-openssl rand -hex 32
-```
-And add it to `.config/.dev.vars`.
-
-### 3. Database Migration & Seeding (Local D1)
-
-```bash
-# Generate migrations (if schema modified)
-bun run db:generate
-
-# Apply migrations to local miniflare D1 state
-bun run db:migrate
-
-# Seed local database
+# Initialise local databasw
+bun run db:migratee
 bun run db:seed
 ```
 
@@ -57,8 +41,6 @@ bun run db:seed
 ```bash
 bun run dev
 ```
-
-Visit [http://localhost:5173](http://localhost:5173).
 
 ---
 
