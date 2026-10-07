@@ -4,12 +4,29 @@ export const test = baseTest.extend({
 	page: async ({ page }, use, testInfo) => {
 		const browserErrors: string[] = [];
 		const sessionRequests: string[] = [];
+		const sessionRequestHeaders: string[] = [];
 		const sessionResponses: string[] = [];
 		const sessionRequestFailures: string[] = [];
 
+		await page.route("**/api/auth/get-session", async (route) => {
+			const request = route.request();
+			const headers = await request.allHeaders();
+			sessionRequestHeaders.push(
+				JSON.stringify({
+					method: request.method(),
+					url: request.url(),
+					origin: headers.origin,
+					referer: headers.referer,
+					accessControlRequestHeaders:
+						headers["access-control-request-headers"],
+				}),
+			);
+			await route.continue();
+		});
+
 		page.on("request", (request) => {
 			if (new URL(request.url()).pathname === "/api/auth/get-session") {
-				sessionRequests.push(request.url());
+				sessionRequests.push(`${request.method()} ${request.url()}`);
 			}
 		});
 		page.on("response", (response) => {
@@ -48,6 +65,7 @@ export const test = baseTest.extend({
 				browserErrors,
 				pageURL: page.url(),
 				sessionRequests,
+				sessionRequestHeaders,
 				sessionResponses,
 				sessionRequestFailures,
 			},
@@ -56,6 +74,7 @@ export const test = baseTest.extend({
 			browserErrors: [],
 			pageURL: page.url(),
 			sessionRequests,
+			sessionRequestHeaders,
 			sessionResponses,
 			sessionRequestFailures,
 		});
