@@ -3,7 +3,9 @@ import { describe, expect, test, vi } from "vitest";
 import { PostCreateForm } from "../ui/post-create-form-lazy";
 
 vi.mock("../ui/post-create-form", () => ({
-	PostCreateForm: () => <div data-testid="real-post-create-form">Loaded Post Create Form</div>,
+	PostCreateForm: () => (
+		<div data-testid="real-post-create-form">Loaded Post Create Form</div>
+	),
 }));
 
 describe("Lazy PostCreateForm", () => {
@@ -17,7 +19,9 @@ describe("Lazy PostCreateForm", () => {
 
 	test("accepts custom fallback", () => {
 		const { container } = render(
-			<PostCreateForm fallback={<div data-testid="custom-fallback">Loading...</div>} />,
+			<PostCreateForm
+				fallback={<div data-testid="custom-fallback">Loading...</div>}
+			/>,
 		);
 
 		expect(container).toBeDefined();

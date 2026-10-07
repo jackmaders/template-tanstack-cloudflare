@@ -25,9 +25,7 @@ vi.mock("../api/post-create.functions", () => ({
 
 describe("usePostCreateMutation", () => {
 	test("creates mutation options and invalidates query on success", async () => {
-		const { result } = renderHook(() =>
-			usePostCreateMutation(),
-		) as unknown as {
+		const { result } = renderHook(() => usePostCreateMutation()) as unknown as {
 			result: {
 				current: {
 					mutationFn: (data: unknown) => Promise<unknown>;

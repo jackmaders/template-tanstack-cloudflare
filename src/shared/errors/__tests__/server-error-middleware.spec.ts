@@ -1,8 +1,8 @@
-import { describe, expect, test, vi } from "vitest";
 import { notFound, redirect } from "@tanstack/react-router";
 import { setResponseStatus } from "@tanstack/react-start/server";
-import { ServerFunctionError } from "../server-function-error";
+import { describe, expect, test, vi } from "vitest";
 import { serverErrorMiddleware } from "../server-error-middleware";
+import { ServerFunctionError } from "../server-function-error";
 
 vi.mock("@tanstack/react-start/server", () => ({
 	setResponseStatus: vi.fn(),

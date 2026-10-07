@@ -17,7 +17,7 @@ export function HomePage() {
 	return (
 		<main className="mx-auto max-w-2xl space-y-8 p-6">
 			<header className="space-y-2">
-				<h1 className="text-2xl font-semibold">Build fast on the edge.</h1>
+				<h1 className="font-semibold text-2xl">Build fast on the edge.</h1>
 				<p className="text-muted-foreground">
 					TanStack Start + Cloudflare starter template.
 				</p>

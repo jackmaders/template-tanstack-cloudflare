@@ -1,6 +1,6 @@
 import { describe, expect, test, vi } from "vitest";
-import { postListQueryOptions } from "../api/post-query-options";
 import { postListServerFn } from "../api/post.functions";
+import { postListQueryOptions } from "../api/post-query-options";
 
 vi.mock("../api/post.functions", () => ({
 	postListServerFn: vi.fn(),

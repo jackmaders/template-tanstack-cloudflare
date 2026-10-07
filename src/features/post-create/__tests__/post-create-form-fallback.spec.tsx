@@ -12,7 +12,7 @@ describe("PostCreateFormFallback", () => {
 			fireEvent.submit(form);
 		}
 
-		const input = screen.getByPlaceholderText("A signal worth keeping");
+		const input = screen.getByPlaceholderText("Post name");
 		expect(input).toBeDisabled();
 
 		const button = screen.getByRole("button", { name: "Add post" });

@@ -1,6 +1,6 @@
 import { describe, expect, test, vi } from "vitest";
-import * as postCreateHandlers from "../api/post-create-handlers";
 import { postCreateServerFn } from "../api/post-create.functions";
+import * as postCreateHandlers from "../api/post-create-handlers";
 
 vi.mock("../api/post-create-handlers", () => ({
 	postCreateHandler: vi.fn(),

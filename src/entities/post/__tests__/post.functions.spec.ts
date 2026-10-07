@@ -1,6 +1,6 @@
 import { describe, expect, test, vi } from "vitest";
-import * as postHandlers from "../api/post-handlers";
 import { postListServerFn } from "../api/post.functions";
+import * as postHandlers from "../api/post-handlers";
 
 vi.mock("../api/post-handlers", () => ({
 	postListHandler: vi.fn(),
@@ -12,7 +12,9 @@ describe("postListServerFn", () => {
 		vi.mocked(postHandlers.postListHandler).mockResolvedValueOnce(mockPosts);
 
 		// biome-ignore lint/nursery/noUnsafeTypeAssertion: test invocation of serverFn
-		const result = await (postListServerFn as unknown as () => Promise<unknown>)();
+		const result = await (
+			postListServerFn as unknown as () => Promise<unknown>
+		)();
 		expect(postHandlers.postListHandler).toHaveBeenCalled();
 		expect(result).toEqual(mockPosts);
 	});
