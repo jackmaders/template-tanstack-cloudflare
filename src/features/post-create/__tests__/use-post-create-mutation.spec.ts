@@ -2,13 +2,28 @@ import { renderHook } from "@testing-library/react";
 import { describe, expect, test, vi } from "vitest";
 import { usePostCreateMutation } from "../api/use-post-create-mutation";
 
-const invalidateQueries = vi.fn();
+type MutationOptions = {
+	mutationFn: (data: { name: string }) => Promise<unknown>;
+	onSuccess?: () => void | Promise<void>;
+};
+
+const mutationMock = vi.hoisted(() => {
+	let options: MutationOptions | undefined;
+	return {
+		captureOptions: (nextOptions: MutationOptions) => {
+			options = nextOptions;
+		},
+		getOptions: () => options,
+		invalidateQueries: vi.fn(),
+	};
+});
+
 vi.mock("@tanstack/react-query", () => ({
-	useQueryClient: () => ({ invalidateQueries }),
-	useMutation: (options: {
-		mutationFn: (data: unknown) => unknown;
-		onSuccess?: () => void;
-	}) => options,
+	useQueryClient: () => ({ invalidateQueries: mutationMock.invalidateQueries }),
+	useMutation: (options: MutationOptions) => {
+		mutationMock.captureOptions(options);
+		return options;
+	},
 	queryOptions: (options: unknown) => options,
 }));
 
@@ -25,24 +40,17 @@ vi.mock("../api/post-create.functions", () => ({
 
 describe("usePostCreateMutation", () => {
 	test("creates mutation options and invalidates query on success", async () => {
-		const { result } = renderHook(() =>
-			usePostCreateMutation(),
-		) as unknown as {
-			result: {
-				current: {
-					mutationFn: (data: unknown) => Promise<unknown>;
-					onSuccess?: () => void;
-				};
-			};
-		};
+		renderHook(() => usePostCreateMutation());
+		const options = mutationMock.getOptions();
 
-		expect(result.current.mutationFn).toBeDefined();
-		expect(typeof result.current.onSuccess).toBe("function");
+		expect(options?.mutationFn).toBeDefined();
+		expect(typeof options?.onSuccess).toBe("function");
 
-		await result.current.mutationFn({ name: "hello" });
-		expect(result.current.mutationFn).toBeDefined();
+		await options?.mutationFn({ name: "hello" });
 
-		result.current.onSuccess?.();
-		expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ["posts"] });
+		await options?.onSuccess?.();
+		expect(mutationMock.invalidateQueries).toHaveBeenCalledWith({
+			queryKey: ["posts"],
+		});
 	});
 });

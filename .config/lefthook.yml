@@ -9,7 +9,7 @@ pre-commit:
   commands:
     biome-check:
       glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc,css,scss}"
-      run: bun run check:git-hook {staged_files}
+      run: bun run check:git-hook:fix {staged_files}
       stage_fixed: true
 
 commit-msg:

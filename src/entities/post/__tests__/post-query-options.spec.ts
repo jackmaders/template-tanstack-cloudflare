@@ -1,6 +1,7 @@
+import { QueryClient, type QueryFunctionContext } from "@tanstack/react-query";
 import { describe, expect, test, vi } from "vitest";
-import { postListQueryOptions } from "../api/post-query-options";
 import { postListServerFn } from "../api/post.functions";
+import { postListQueryOptions } from "../api/post-query-options";
 
 vi.mock("../api/post.functions", () => ({
 	postListServerFn: vi.fn(),
@@ -16,7 +17,15 @@ describe("postListQueryOptions", () => {
 		]);
 
 		expect(postListQueryOptions.queryFn).toBeDefined();
-		const result = await postListQueryOptions.queryFn?.({} as never);
+		const queryContext: QueryFunctionContext<
+			typeof postListQueryOptions.queryKey
+		> = {
+			client: new QueryClient(),
+			meta: undefined,
+			queryKey: postListQueryOptions.queryKey,
+			signal: new AbortController().signal,
+		};
+		const result = await postListQueryOptions.queryFn?.(queryContext);
 		expect(result).toHaveLength(1);
 		expect(postListServerFn).toHaveBeenCalled();
 	});

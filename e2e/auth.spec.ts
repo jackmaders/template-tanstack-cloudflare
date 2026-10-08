@@ -1,12 +1,17 @@
-import { expect, type Page, test } from "@playwright/test";
+import type { Page } from "@playwright/test";
+import { expect, test } from "./fixtures";
+import { setTestClientIp } from "./test-client";
 
 const password = "e2e-password-123";
 
-test("authenticates users and protects server functions", async ({ page }) => {
+test("authenticates users and gates post creation by session", async ({
+	page,
+}) => {
 	const email = `e2e-${crypto.randomUUID()}@example.com`;
 	const authenticatedPostName = `Authenticated post ${crypto.randomUUID()}`;
 	const anonymousPostName = `Anonymous post ${crypto.randomUUID()}`;
 
+	await setTestClientIp(page);
 	await page.goto("/");
 	await page.locator('html[data-hydrated="true"]').waitFor();
 	await expect(page.getByText("Authentication")).toBeVisible();

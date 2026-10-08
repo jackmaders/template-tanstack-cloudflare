@@ -17,9 +17,9 @@ describe("postCreateHandler", () => {
 		const session = createMockDatabase();
 		sessions.push(session);
 
-		// biome-ignore lint/nursery/noUnsafeTypeAssertion: in-memory sqlite mock driver for test
 		const result = await postCreateHandler(
 			{ name: "Brand New Post" },
+			// biome-ignore lint/nursery/noUnsafeTypeAssertion: the in-memory SQLite driver replaces the D1 driver in this unit test.
 			session.db as never,
 		);
 
@@ -35,8 +35,11 @@ describe("postCreateHandler", () => {
 		sessions.push(session);
 
 		await expect(
-			// biome-ignore lint/nursery/noUnsafeTypeAssertion: testing runtime validation
-			postCreateHandler({ name: 123 as never }, session.db as never),
+			postCreateHandler(
+				{ name: 123 },
+				// biome-ignore lint/nursery/noUnsafeTypeAssertion: the in-memory SQLite driver replaces the D1 driver in this unit test.
+				session.db as never,
+			),
 		).rejects.toThrow();
 	});
 });

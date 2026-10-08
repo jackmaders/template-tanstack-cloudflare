@@ -32,6 +32,7 @@ describe("reportServerError", () => {
 				event: "server_function.error",
 				operation: "testOp",
 				expected: false,
+				// biome-ignore lint/style/useNamingConvention: preserve the structured log field name.
 				error_message: "Something broke",
 			}),
 		);
@@ -49,6 +50,7 @@ describe("reportServerError", () => {
 				event: "server_function.error",
 				operation: "testOp",
 				expected: false,
+				// biome-ignore lint/style/useNamingConvention: preserve the structured log field name.
 				error_message: "raw string error",
 			}),
 		);

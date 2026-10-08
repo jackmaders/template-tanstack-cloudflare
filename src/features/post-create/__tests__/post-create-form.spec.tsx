@@ -8,7 +8,7 @@ vi.mock("../api/use-post-create-mutation");
 
 describe("PostCreateForm", () => {
 	test("renders the post name field and submit button", () => {
-		render(<PostCreateForm />);
+		renderPostCreateForm();
 
 		expect(screen.getByLabelText("Post name")).toBeInTheDocument();
 		expect(
@@ -18,7 +18,7 @@ describe("PostCreateForm", () => {
 
 	test("creates a post and clears the form", async () => {
 		const user = userEvent.setup();
-		render(<PostCreateForm />);
+		renderPostCreateForm();
 
 		const input = screen.getByLabelText("Post name");
 		await user.type(input, "First post");
@@ -39,7 +39,7 @@ describe("PostCreateForm", () => {
 			new Error("Failed"),
 		);
 
-		render(<PostCreateForm />);
+		renderPostCreateForm();
 
 		const input = screen.getByLabelText("Post name");
 		await user.type(input, "Failed post");
@@ -53,9 +53,22 @@ describe("PostCreateForm", () => {
 		);
 	});
 
+	test("prompts anonymous users without calling the server function", async () => {
+		const user = userEvent.setup();
+		renderPostCreateForm({ isAuthenticated: false });
+
+		await user.type(screen.getByLabelText("Post name"), "Anonymous post");
+		await user.click(screen.getByRole("button", { name: "Add post" }));
+
+		expect(screen.getByRole("alert")).toHaveTextContent(
+			"Sign in to create a post.",
+		);
+		expect(usePostCreateMutation().mutateAsync).not.toHaveBeenCalled();
+	});
+
 	test("does not create a post when the name is blank", async () => {
 		const user = userEvent.setup();
-		render(<PostCreateForm />);
+		renderPostCreateForm();
 
 		const input = screen.getByLabelText("Post name");
 		await user.type(input, "   ");
@@ -71,11 +84,24 @@ describe("PostCreateForm", () => {
 		vi.mocked(usePostCreateMutation).mockReturnValueOnce({
 			isPending: true,
 			mutateAsync: vi.fn(),
+			// biome-ignore lint/nursery/noUnsafeTypeAssertion: this test only needs the pending fields from the mutation result.
 		} as never);
 
-		render(<PostCreateForm />);
+		renderPostCreateForm();
 
 		const button = screen.getByRole("button", { name: "Adding..." });
 		expect(button).toBeDisabled();
 	});
 });
+
+function renderPostCreateForm({
+	isAuthenticated = true,
+	isSessionPending = false,
+}: Partial<{ isAuthenticated: boolean; isSessionPending: boolean }> = {}) {
+	return render(
+		<PostCreateForm
+			isAuthenticated={isAuthenticated}
+			isSessionPending={isSessionPending}
+		/>,
+	);
+}

@@ -1,4 +1,5 @@
 import { lazy, type ReactNode, Suspense } from "react";
+import type { PostCreateFormProps as FormProps } from "./post-create-form";
 import { PostCreateFormFallback } from "./post-create-form-fallback";
 
 const LazyPostCreateForm = lazy(() =>
@@ -7,16 +8,21 @@ const LazyPostCreateForm = lazy(() =>
 	})),
 );
 
-export interface PostCreateFormProps {
+export interface PostCreateFormProps extends FormProps {
 	fallback?: ReactNode;
 }
 
 export function PostCreateForm({
 	fallback = <PostCreateFormFallback />,
-}: PostCreateFormProps = {}) {
+	isAuthenticated,
+	isSessionPending,
+}: PostCreateFormProps) {
 	return (
 		<Suspense fallback={fallback}>
-			<LazyPostCreateForm />
+			<LazyPostCreateForm
+				isAuthenticated={isAuthenticated}
+				isSessionPending={isSessionPending}
+			/>
 		</Suspense>
 	);
 }

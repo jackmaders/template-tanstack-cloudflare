@@ -21,6 +21,7 @@ describe("getSession", () => {
 			user: { id: "u1", name: "User 1" },
 			session: { id: "s1" },
 		};
+		// biome-ignore lint/nursery/noUnsafeTypeAssertion: fixture omits unrelated Better Auth session fields.
 		vi.mocked(auth.api.getSession).mockResolvedValueOnce(mockSession as never);
 
 		const result = await getSession();
@@ -29,7 +30,7 @@ describe("getSession", () => {
 	});
 
 	test("returns null when session does not exist", async () => {
-		vi.mocked(auth.api.getSession).mockResolvedValueOnce(null as never);
+		vi.mocked(auth.api.getSession).mockResolvedValueOnce(null);
 
 		await expect(getSession()).resolves.toBeNull();
 	});
