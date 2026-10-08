@@ -2,11 +2,7 @@ import type { RolldownOptions } from "rolldown";
 
 export const rolldownOptions: RolldownOptions = {
 	onwarn(warning) {
-		throw new Error(
-			`Build warning encountered: ${warning.message}${
-				warning.plugin ? ` (plugin: ${warning.plugin})` : ""
-			}`,
-		);
+		throw new Error(warning.message);
 	},
 	output: {
 		codeSplitting: {
