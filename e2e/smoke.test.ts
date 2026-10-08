@@ -1,5 +1,5 @@
 // e2e/smoke.spec.ts
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 test.describe("Home page", () => {
 	test.beforeEach(async ({ page }) => {

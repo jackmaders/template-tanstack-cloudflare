@@ -1,5 +1,6 @@
 import { execFileSync } from "node:child_process";
-import { expect, type Page, test } from "@playwright/test";
+import type { Page } from "@playwright/test";
+import { expect, test } from "./fixtures";
 import { setTestClientIp } from "./test-client";
 
 const password = "e2e-password-123";

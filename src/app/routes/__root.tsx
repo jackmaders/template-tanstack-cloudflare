@@ -1,15 +1,13 @@
-import { TanStackDevtools } from "@tanstack/react-devtools";
 import type { QueryClient } from "@tanstack/react-query";
 import {
 	createRootRouteWithContext,
 	HeadContent,
 	Scripts,
 } from "@tanstack/react-router";
-import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { useEffect } from "react";
 
 import { NotFoundPage } from "@/components/not-found-page";
-import appCss from "../styles/index.css?inline";
+import appCss from "../styles/index.css?url";
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 	{
@@ -32,6 +30,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 			],
 			links: [
 				{
+					rel: "stylesheet",
+					href: appCss,
+				},
+				{
 					rel: "icon",
 					href: "/favicon.svg",
 					type: "image/svg+xml",
@@ -52,21 +54,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 		<html lang="en">
 			<head>
 				<HeadContent />
-				<style>{appCss}</style>
 			</head>
 			<body>
 				{children}
-				<TanStackDevtools
-					config={{
-						position: "bottom-right",
-					}}
-					plugins={[
-						{
-							name: "Tanstack Router",
-							render: <TanStackRouterDevtoolsPanel />,
-						},
-					]}
-				/>
 				<Scripts />
 			</body>
 		</html>
