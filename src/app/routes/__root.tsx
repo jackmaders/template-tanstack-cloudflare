@@ -8,7 +8,7 @@ import {
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { useEffect } from "react";
 
-import { NotFoundPage } from "@/pages/not-found";
+import { NotFoundPage } from "@/components/not-found-page";
 import appCss from "../styles/index.css?inline";
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(

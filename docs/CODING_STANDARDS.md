@@ -6,7 +6,7 @@ This document defines the repository's coding standards and design heuristics.
 
 ## 1. Architectural Alignment
 
-- **Features-First Placement:** Reusable domain logic and user interactions begin immediately in `entities/` or `features/`, not deferred in `pages/`. Naming convention: `{noun}-{verb}` for features (user actions), `{noun}` for entities (domain models), and `{noun}-{purpose}` for widgets (composite read UI).
+- **Features-First Placement:** Reusable domain logic and user interactions live in feature directories (`src/features/{feature-name}/`), containing their components, api/functions, queries/mutations, and types. Shared UI primitives live in `src/components/`, and route compositions live in `src/app/routes/`.
 - **Deep Modules with Substantial Implementation:** Design modules that encapsulate meaningful complexity behind a clean, cohesive interface. Keep policy orchestration and step execution together unless they change for different reasons or serve distinct consumers.
 - **Translate at the Border:** Third-party vendor payloads, external schemas, and untyped I/O must be parsed into validated domain types at the adapter boundary. Never leak external vendor schemas into core domain interfaces.
 - **Insulate Volatile Dependencies Only:** Stable, type-safe ecosystem libraries (e.g. Drizzle, Zod, TanStack Router) should be used directly. Wrap only volatile, proprietary, or un-typed external SDKs.
@@ -17,11 +17,10 @@ This document defines the repository's coding standards and design heuristics.
 
 - **Prefer Inferred & Computed Types:** Derive types directly from the single source of truth rather than recreating manual type definitions. For example, database row and insert types must be inferred from the Drizzle schema (`typeof table.$inferSelect` / `$inferInsert`), and API types should be inferred from Zod schemas (`z.infer<typeof schema>`).
 - **Parse at the Boundary, Keep Data Immutable:** Validate data strictly upon ingress. In core business logic, prefer plain, immutable, serializable data objects (POJOs / interfaces) and pure transformation functions over heavy stateful OOP class hierarchies.
-- **Public Seam as a Change Contract:** A slice's public barrel promises stability to callers; anything internal to the slice reserves the freedom to be refactored without breaking external dependents.
-- **Specialized & Async Slice Entrypoints:** Specialized barrels (`index.*.ts`) are valid first-class entrypoints:
-  - Code-split components are exported in `index.async.ts`.
-  - Worker-only functionality is exported in `index.server.ts`.
-  - Browser-only functionality is exported in `index.client.ts`.
+- **Public Seam as a Change Contract:** A feature's or module's public entrypoint promises stability to callers; anything internal reserves the freedom to be refactored without breaking external dependents.
+- **Specialized Entrypoints:** Specialized module entrypoints (`*.server.ts`, `*.client.ts`) are used for environment boundaries:
+  - Worker-only functionality is marked with server-only boundaries (`.server.ts`).
+  - Browser-only functionality is marked with client-only boundaries (`.client.ts`).
 
 ---
 

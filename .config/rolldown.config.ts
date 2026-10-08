@@ -6,6 +6,7 @@ export const rolldownOptions: RolldownOptions = {
 			groups: [
 				{ name: "posthog", test: /node_modules\/posthog-js/ },
 				{ name: "zod", test: /node_modules\/zod/ },
+				{ name: "react-vendor", test: /node_modules\/(react|react-dom)/ },
 			],
 		},
 	},
