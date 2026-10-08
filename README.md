@@ -37,7 +37,7 @@ cp .config/.dev.vars.example .config/.dev.vars
 openssl rand -base64 32
 ```
 
-Put the generated value in `BETTER_AUTH_SECRET` in `.config/.dev.vars`. This secret is required by Better Auth. `BETTER_AUTH_URL` is already set to `http://localhost:5173`; change it only if you run the app at a different URL. PostHog is optional: leave `VITE_POSTHOG_KEY` empty to disable telemetry.
+Put the generated value in `BETTER_AUTH_SECRET` in `.config/.dev.vars`. This secret is required by Better Auth. `BETTER_AUTH_URL` is already set to `http://localhost:5173`; change it only if you run the app at a different URL.
 
 ### 4. Migrate and seed the local database
 
@@ -62,7 +62,7 @@ The codebase strictly adheres to **Feature-Sliced Design (FSD)**:
 
 ```text
 src/
-├── app/         # Router configuration, root routes, telemetry (PostHog), global styles
+├── app/         # Router configuration, root routes, global styles
 ├── pages/       # Composite page views (e.g. HomePage)
 ├── widgets/     # Independent UI blocks (e.g. PostFeed)
 ├── features/    # User actions and interactive units (e.g. PostCreateForm, SessionPanel)
