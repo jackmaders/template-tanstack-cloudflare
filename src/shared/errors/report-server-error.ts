@@ -1,5 +1,5 @@
 // biome-ignore-all lint/style/useNamingConvention: Log field names follow the observability schema
-// biome-ignore-all lint/suspicious/noConsole: Cloudflare Workers exports console logs to PostHog
+// biome-ignore-all lint/suspicious/noConsole: Cloudflare Workers exports console logs to stdout/observability
 
 import { ServerFunctionError } from "./server-function-error";
 

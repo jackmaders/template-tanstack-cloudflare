@@ -1,12 +1,16 @@
 import type { RolldownOptions } from "rolldown";
 
 export const rolldownOptions: RolldownOptions = {
+	onwarn(warning) {
+		throw new Error(
+			`Build warning encountered: ${warning.message}${
+				warning.plugin ? ` (plugin: ${warning.plugin})` : ""
+			}`,
+		);
+	},
 	output: {
 		codeSplitting: {
-			groups: [
-				{ name: "posthog", test: /node_modules\/posthog-js/ },
-				{ name: "zod", test: /node_modules\/zod/ },
-			],
+			groups: [{ name: "zod", test: /node_modules\/zod/ }],
 		},
 	},
 };
