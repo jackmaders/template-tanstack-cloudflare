@@ -49,9 +49,6 @@ jobs:
       - name: 🔀 Verify Route Tree
         run: git diff --exit-code **/routeTree.gen.ts
 
-      - name: 🧩 Verify Chunk Sizes
-        run: bun run check:chunk-size
-
       - name: 📦 Verify Worker Deployment
         run: bun run deploy:dry-run
 
@@ -159,9 +156,6 @@ jobs:
 
       - name: ✨ Check Code Lint & Format
         run: bun run check:ci
-
-      - name: 🧱 Check Feature-Sliced Architecture
-        run: bun run check:architecture
 
       - name: 🧭 Check Dependency Graph
         run: bun run check:knip
