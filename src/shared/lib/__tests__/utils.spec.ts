@@ -12,4 +12,9 @@ describe("cn", () => {
 
 		expect(getConditionalClasses(false, true)).toBe("base block");
 	});
+
+	test("resolves conflicting Tailwind utility classes in favour of overrides", () => {
+		expect(cn("p-2", "p-4")).toBe("p-4");
+		expect(cn("text-red-500", "text-blue-500")).toBe("text-blue-500");
+	});
 });
