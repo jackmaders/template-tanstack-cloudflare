@@ -36,7 +36,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           ENVIRONMENT=$(gh api "repos/${GITHUB_REPOSITORY}/environments/production")
-          printf '%s' "$ENVIRONMENT" | jq -e '[.protection_rules[]? | select(.type == "required_reviewers")] | length > 0' >/dev/null || {
+          printf '%s' "$ENVIRONMENT" | jq -e '[.protection_rules[]? | select(.type == "required_reviewers" and ((.reviewers // []) | length > 0))] | length > 0' >/dev/null || {
             echo "::error::The production environment must require at least one reviewer."; exit 1;
           }
           BRANCH_POLICIES=$(gh api "repos/${GITHUB_REPOSITORY}/environments/production/deployment-branch-policies")
