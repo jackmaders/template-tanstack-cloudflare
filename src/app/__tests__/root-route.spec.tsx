@@ -1,27 +1,7 @@
 import { render } from "@testing-library/react";
 import { describe, expect, test, vi } from "vitest";
 
-vi.mock("@tanstack/react-router", async (importOriginal) => {
-	const actual =
-		await importOriginal<typeof import("@tanstack/react-router")>();
-	return {
-		...actual,
-		// biome-ignore lint/style/useNamingConvention: the mock must match the component export.
-		HeadContent: () => null,
-		// biome-ignore lint/style/useNamingConvention: the mock must match the component export.
-		Scripts: () => null,
-	};
-});
-
-vi.mock("@tanstack/react-devtools", () => ({
-	// biome-ignore lint/style/useNamingConvention: the mock must match the component export.
-	TanStackDevtools: () => null,
-}));
-
-vi.mock("@tanstack/react-router-devtools", () => ({
-	// biome-ignore lint/style/useNamingConvention: the mock must match the component export.
-	TanStackRouterDevtoolsPanel: () => null,
-}));
+vi.mock("@tanstack/react-router");
 
 import { Route } from "../routes/__root";
 

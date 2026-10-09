@@ -3,17 +3,8 @@ import { describe, expect, test, vi } from "vitest";
 import { getSession } from "../api/auth.functions";
 import { auth } from "../api/auth.server";
 
-vi.mock("@tanstack/react-start/server", () => ({
-	getRequestHeaders: vi.fn(() => new Headers()),
-}));
-
-vi.mock("../api/auth.server", () => ({
-	auth: {
-		api: {
-			getSession: vi.fn(),
-		},
-	},
-}));
+vi.mock("@tanstack/react-start/server");
+vi.mock("../api/auth.server");
 
 describe("getSession", () => {
 	test("returns session when session exists", async () => {

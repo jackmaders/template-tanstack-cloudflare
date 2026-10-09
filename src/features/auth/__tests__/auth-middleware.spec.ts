@@ -3,9 +3,7 @@ import { ServerFunctionError } from "@/shared/errors";
 import { getSession } from "../api/auth.functions";
 import { authMiddleware } from "../api/auth-middleware";
 
-vi.mock("../api/auth.functions", () => ({
-	getSession: vi.fn(),
-}));
+vi.mock("../api/auth.functions");
 
 describe("authMiddleware", () => {
 	// biome-ignore lint/nursery/noUnsafeTypeAssertion: access the middleware handler to verify its server boundary.

@@ -1,9 +1,7 @@
 import { describe, expect, test, vi } from "vitest";
 import { ensureAdminAccessServerFn } from "../api/admin.functions";
 
-vi.mock("../api/admin-middleware", () => ({
-	adminMiddleware: vi.fn(),
-}));
+vi.mock("../api/admin-middleware");
 
 describe("ensureAdminAccessServerFn", () => {
 	test("returns no session data", async () => {
