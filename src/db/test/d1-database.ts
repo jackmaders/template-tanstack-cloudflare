@@ -4,7 +4,7 @@
 import type { D1Migration } from "@cloudflare/vitest-pool-workers";
 import { drizzle } from "drizzle-orm/d1";
 import { Miniflare } from "miniflare";
-import { postRelations } from "@/shared/db";
+import { postRelations } from "@/db";
 
 export interface D1TestSession {
 	clearTables: () => Promise<void>;

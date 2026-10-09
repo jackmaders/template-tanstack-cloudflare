@@ -34,7 +34,7 @@ export default defineConfig({
 				"**/__mocks__/**",
 				"**/index*.ts",
 				"src/app/**",
-				"src/shared/db/**",
+				"src/db/**",
 				"src/shared/auth/**",
 			],
 			thresholds: {

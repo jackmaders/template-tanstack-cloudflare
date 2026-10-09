@@ -9,5 +9,6 @@ When implementing features, writing tests, or reviewing code, read `docs/CODING_
 This project follows **Bulletproof React**:
 - `src/app`: Routing, route definitions, global providers, and styles.
 - `src/features`: Feature modules containing domain logic, components, queries/mutations, and types (e.g. `src/features/posts`, `src/features/auth`).
+- `src/db`: Database schema, clients, seeds, and database test support.
 - `src/components`: Shared, reusable UI primitives (Button, Input, Card, Badge, Separator) and layouts.
-- `src/shared`: Reusable infrastructure, database clients, errors, and utilities.
+- `src/shared`: Reusable infrastructure, errors, and utilities.

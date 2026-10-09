@@ -1,6 +1,8 @@
 import { sql } from "drizzle-orm";
 import { index, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
-import type { UserRole } from "@/features/auth/auth-roles";
+
+const USER_ROLES = ["user", "admin"] as const;
+type UserRole = (typeof USER_ROLES)[number];
 
 export const user = sqliteTable("user", {
 	id: text("id")

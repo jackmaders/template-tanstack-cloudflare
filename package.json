@@ -16,7 +16,7 @@
 		"db:generate": "drizzle-kit generate --config=.config/drizzle.config.ts",
 		"db:migrate": "wrangler d1 migrations apply DB --local --persist-to .wrangler/state -c .config/wrangler.json",
 		"db:migrate:remote": "wrangler d1 migrations apply DB --remote -c .config/wrangler.json",
-		"db:seed": "wrangler d1 execute DB --local --file=src/shared/db/seed/seed.sql --persist-to .wrangler/state -c .config/wrangler.json",
+		"db:seed": "wrangler d1 execute DB --local --file=src/db/seed/seed.sql --persist-to .wrangler/state -c .config/wrangler.json",
 		"deploy": "wrangler deploy -c dist/server/wrangler.json",
 		"deploy:dry-run": "wrangler deploy -c dist/server/wrangler.json --dry-run",
 		"dev": "vite dev -c .config/vite.config.ts",

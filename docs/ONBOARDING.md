@@ -42,7 +42,7 @@ The PR quality workflow runs unit/integration tests, a production build, route-t
 | `bun run check` / `bun run check:ci` | Run Biome locally / in CI mode |
 | `bun run check:types` | Run TypeScript type checking |
 | `bun run check:knip` | Check for unused code, exports, and dependencies |
-| `bun run test` | Run Vitest unit and integration tests with 100% line, statement, function, and branch coverage thresholds; write text, JSON, and HTML reports to `coverage/` |
+| `bun run test` | Run Vitest unit and integration tests |
 | `bun run test:browser` | Run Playwright end-to-end tests |
 | `bun run db:generate` | Generate Drizzle SQL migrations |
 | `bun run db:migrate` | Apply migrations to local D1 |
@@ -69,7 +69,7 @@ Use the posts feature as a vertical slice. For a new `projects` feature, place e
 
 In the current posts slice, `src/app/routes/index.tsx` preloads `postListQueryOptions`; `post-query-options.ts` calls `postListServerFn`; `post.functions.ts` delegates to `postListHandler`; the handler accesses D1 through `getDb`; and the Zod schemas live in `types/post-validation.ts`. `PostFeed` and `PostCreateForm` keep feature UI under `components/`. This gives you a working example of route, UI, query, server function, validation, and database concerns without putting database access in the route.
 
-For tests, keep one test focused on one behavior, with arrange, act, and assert phases. Test pure validation and transformation directly; test database handlers against the isolated D1 helpers in `__mocks__/d1-database.ts`; mock server functions when testing UI states; and test middleware behavior at its boundary. Add regression coverage for changed behavior. Run the narrow spec while iterating, then run `bun run check:types`, `bun run check:ci`, and `bun run test` before opening a PR. Run browser tests when changing route flows or end-to-end behavior.
+For tests, keep one test focused on one behavior, with arrange, act, and assert phases. Test pure validation and transformation directly; test database handlers against the isolated D1 helpers in `src/db/test/d1-database.ts`; mock server functions when testing UI states; and test middleware behavior at its boundary. Add regression coverage for changed behavior. Run the narrow spec while iterating, then run `bun run check:types`, `bun run check:ci`, and `bun run test` before opening a PR. Run browser tests when changing route flows or end-to-end behavior.
 
 ## Deploy to Cloudflare
 
@@ -95,4 +95,4 @@ For tests, keep one test focused on one behavior, with arrange, act, and assert 
    bun run deploy
    ```
 
-The `deploy` script publishes the generated Worker config at `dist/server/wrangler.json`. The manual production GitHub workflow performs the build, remote migration, then deploy; it requires a `production` GitHub environment restricted to `main`, required reviewers, `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` environment secrets, and a `PRODUCTION_URL` environment variable. Before dispatching deployment, verify that **PR Quality Checks** succeeded for the exact `main` commit you intend to deploy. Post-deploy browser and Lighthouse checks use `PRODUCTION_URL` without an example fallback. The workflow does not set `BETTER_AUTH_URL` or create an admin user, so configure the public auth URL and provision production admin access separately before relying on the admin area. The checked-in seed is local-only.
+The `deploy` script publishes the generated Worker config at `dist/server/wrangler.json`. The manual production GitHub workflow performs the build, remote migration, then deploy; it requires `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` secrets. The workflow does not set `BETTER_AUTH_URL` or create an admin user, so configure the public auth URL and provision production admin access separately before relying on the admin area. The checked-in seed is local-only.

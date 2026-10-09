@@ -16,8 +16,9 @@ A full-stack starter for teams building with TanStack Start on Cloudflare Worker
 src/
 ├── app/         # Routes, router setup, global styles
 ├── features/    # Domain UI, server functions, queries, and types
+├── db/          # Database schema, clients, seeds, and database test support
 ├── components/  # Shared UI primitives and layouts
-└── shared/      # Database, errors, and reusable infrastructure
+└── shared/      # Errors and reusable infrastructure
 ```
 
 ## Documentation
