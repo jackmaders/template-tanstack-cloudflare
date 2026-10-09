@@ -7,6 +7,7 @@ This document defines the repository's coding standards and design heuristics.
 ## 1. Architectural Alignment
 
 - **Features-First Placement:** Reusable domain logic and user interactions live in feature directories (`src/features/{feature-name}/`), containing their components, api/functions, queries/mutations, and types. Shared UI primitives live in `src/components/`, and route compositions live in `src/app/routes/`.
+- **Feature Imports:** Routes and other features import feature capabilities through direct, purpose-named module paths (for example, `@/features/auth/auth-client`, `@/features/auth/components/session-panel`, and `@/features/posts/api/post-query-options`). These paths are the documented public convention; avoid feature-wide barrel files that obscure client/server boundaries. Keep implementation details private when they are not needed by a consumer.
 - **Deep Modules with Substantial Implementation:** Design modules that encapsulate meaningful complexity behind a clean, cohesive interface. Keep policy orchestration and step execution together unless they change for different reasons or serve distinct consumers.
 - **Translate at the Border:** Third-party vendor payloads, external schemas, and untyped I/O must be parsed into validated domain types at the adapter boundary. Never leak external vendor schemas into core domain interfaces.
 - **Insulate Volatile Dependencies Only:** Stable, type-safe ecosystem libraries (e.g. Drizzle, Zod, TanStack Router) should be used directly. Wrap only volatile, proprietary, or un-typed external SDKs.
@@ -36,7 +37,9 @@ This document defines the repository's coding standards and design heuristics.
 
 ## 4. Error & Null Handling
 
-- **Exceptions for Unexpected Breakages Only:** Throwing is reserved for unrecoverable errors and external library control-flow primitives that require it by design (e.g. router redirects). Business logic functions should return values.
+- **Represent Expected Operational Failures Explicitly:** Authentication, authorization, validation, and known database conflict or constraint failures are expected outcomes of a request. Translate them at the boundary into the existing `ServerFunctionError` with an appropriate HTTP status, or return a typed result when the caller needs to branch on the outcome. Do not leak raw vendor or database errors as user-facing messages.
+- **Use the Existing Error Middleware:** Server functions run through `serverErrorMiddleware`. It sets the response status for `ServerFunctionError`, reports failures, then rethrows so TanStack Start handles the response. Auth middleware uses `ServerFunctionError` for unauthenticated requests; server-function validators should map invalid input to a 400 error. If a Drizzle operation can fail for a known, expected reason (for example, a uniqueness conflict), catch that specific database condition in its server handler and translate it to a `ServerFunctionError` or typed result. Do not convert every database exception into a client error.
+- **Reserve Throws for Exceptional Control Flow:** Unexpected infrastructure failures should remain errors, be reported by middleware, and propagate. TanStack Router `redirect()` and `notFound()` are framework control-flow exceptions; rethrow them unchanged. Do not catch them as ordinary operational failures.
 - **Pass True Shapes:** Pass around the true, complete shape of an object through domain handlers, business pipelines, and orchestrator components rather than fragmenting it into piecemeal fields.
 - **Narrow Nullability Early:** When a function accepts nullable input, validate or narrow it immediately at entry so downstream code receives the verified non-nullable value without redundant fallback checks.
 
