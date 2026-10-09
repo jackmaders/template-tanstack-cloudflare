@@ -25,7 +25,7 @@
 		"lint:fix": "biome lint --config-path=.config/biome.json --write --unsafe .",
 		"preview": "wrangler dev dist/server/index.js -c dist/server/wrangler.json --persist-to .wrangler/state --var BETTER_AUTH_URL:http://localhost:8787",
 		"shadcn:add": "bunx --bun shadcn@latest add --cwd .config",
-		"test": "vitest --run -c .config/vitest.config.ts",
+		"test": "vitest --run --coverage -c .config/vitest.config.ts",
 		"test:browser": "playwright test -c .config/playwright.config.ts",
 		"test:lighthouse": "lhci autorun --config=.config/lighthouserc.json"
 	},

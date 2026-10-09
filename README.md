@@ -89,7 +89,7 @@ src/
 - `bun run db:migrate` - Apply migrations locally
 - `bun run db:migrate:remote` - Apply migrations to remote Cloudflare D1
 - `bun run db:seed` - Seed local D1 through Wrangler
-- `bun run test` - Run unit and integration tests with Vitest
+- `bun run test` - Run unit and integration tests with Vitest and enforce the configured 100% coverage thresholds. The command writes text, JSON, and HTML reports to `coverage/`; CI runs the same command.
 - `bun run test:browser` - Run Playwright E2E tests
 
 ---
