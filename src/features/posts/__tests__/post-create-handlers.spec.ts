@@ -7,7 +7,10 @@ import {
 	test,
 } from "vitest";
 import { user } from "@/shared/db";
-import { createTestDatabase, type D1TestSession } from "@/test/d1-database";
+import {
+	createTestDatabase,
+	type D1TestSession,
+} from "../../../../__mocks__/d1-database";
 import { postCreateHandler } from "../api/post-create-handlers";
 
 describe("postCreateHandler", () => {
