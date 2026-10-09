@@ -1,28 +1,39 @@
 import { describe, expect, test, vi } from "vitest";
-import { ServerFunctionError } from "@/shared/errors";
+import { adminMiddleware } from "../api/admin-middleware";
 import { getSession } from "../api/auth.functions";
-import { authMiddleware } from "../api/auth-middleware";
 
 vi.mock("../api/auth.functions");
 
-describe("authMiddleware", () => {
+describe("adminMiddleware", () => {
 	// biome-ignore lint/nursery/noUnsafeTypeAssertion: access the middleware handler to verify its server boundary.
-	const serverHandler = authMiddleware.options.server as (options: {
+	const serverHandler = adminMiddleware.options.server as (options: {
 		next: (options?: { context?: unknown }) => Promise<unknown>;
 	}) => Promise<unknown>;
 
-	test("rejects unauthenticated calls before invoking the handler", async () => {
+	test("redirects when no session exists", async () => {
 		vi.mocked(getSession).mockResolvedValueOnce(null);
 		const next = vi.fn();
 
-		await expect(serverHandler({ next })).rejects.toEqual(
-			new ServerFunctionError("Unauthorized", 401),
-		);
+		await expect(serverHandler({ next })).rejects.toMatchObject({
+			options: { to: "/" },
+		});
 		expect(next).not.toHaveBeenCalled();
 	});
 
-	test("passes authenticated session to the next handler", async () => {
+	test("redirects when the session user is not an admin", async () => {
 		const session = { user: { id: "user-1", role: "user" } };
+		// biome-ignore lint/nursery/noUnsafeTypeAssertion: fixture omits unrelated Better Auth session fields.
+		vi.mocked(getSession).mockResolvedValueOnce(session as never);
+		const next = vi.fn();
+
+		await expect(serverHandler({ next })).rejects.toMatchObject({
+			options: { to: "/" },
+		});
+		expect(next).not.toHaveBeenCalled();
+	});
+
+	test("passes an admin session to the next handler", async () => {
+		const session = { user: { id: "admin-1", role: "admin" } };
 		// biome-ignore lint/nursery/noUnsafeTypeAssertion: fixture omits unrelated Better Auth session fields.
 		vi.mocked(getSession).mockResolvedValueOnce(session as never);
 		const next = vi.fn().mockResolvedValue("handled");

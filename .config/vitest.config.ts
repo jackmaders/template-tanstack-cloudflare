@@ -4,8 +4,12 @@ export default defineConfig({
 	resolve: {
 		tsconfigPaths: true,
 		alias: {
+			"better-auth/react": new URL(
+				"../__mocks__/better-auth/react.ts",
+				import.meta.url,
+			).pathname,
 			"cloudflare:workers": new URL(
-				"../src/test/cloudflare-workers.ts",
+				"../__mocks__/cloudflare-workers.ts",
 				import.meta.url,
 			).pathname,
 		},
@@ -29,10 +33,8 @@ export default defineConfig({
 				"**/__mocks__/**",
 				"**/index*.ts",
 				"src/app/**",
-				"src/cloudflare-env.d.ts",
 				"src/shared/db/**",
 				"src/shared/auth/**",
-				"src/test/**",
 			],
 			thresholds: {
 				lines: 100,
