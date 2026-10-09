@@ -5,9 +5,11 @@ export const rolldownOptions: RolldownOptions = {
 		throw new Error(warning.message);
 	},
 	output: {
-		groups: [
-			{ name: "zod", test: /node_modules\/zod/ },
-			{ name: "react-vendor", test: /node_modules\/(react|react-dom)/ },
-		],
+		codeSplitting: {
+			groups: [
+				{ name: "zod", test: /node_modules\/zod/ },
+				{ name: "react-vendor", test: /node_modules\/(react|react-dom)/ },
+			],
+		},
 	},
 };
