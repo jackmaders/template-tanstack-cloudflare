@@ -1,6 +1,6 @@
 # template-tanstack-start-cloudflare
 
-A production-ready full-stack template powered by **TanStack Start**, **Cloudflare Workers & D1**, **Better Auth**, and **Drizzle ORM**, built with **Feature-Sliced Design (FSD)** and **Bun**.
+A production-ready full-stack template powered by **TanStack Start**, **Cloudflare Workers & D1**, **Better Auth**, and **Drizzle ORM**, built with **Bulletproof React** and **Bun**.
 
 ---
 
@@ -11,7 +11,7 @@ A production-ready full-stack template powered by **TanStack Start**, **Cloudfla
 - **Database & ORM**: [Cloudflare D1](https://developers.cloudflare.com/d1/) with [Drizzle ORM](https://orm.drizzle.team/)
 - **Authentication**: [Better Auth](https://better-auth.com/) (Email & Password, sessions, admin roles)
 - **Styling**: [Tailwind CSS v4](https://tailwindcss.com/) & [shadcn/ui](https://ui.shadcn.com/)
-- **Tooling**: [Bun](https://bun.sh/), [Biome](https://biomejs.dev/), [Steiger](https://github.com/feature-sliced/steiger), [Knip](https://knip.dev/), [Vitest](https://vitest.dev/), [Playwright](https://playwright.dev/)
+- **Tooling**: [Bun](https://bun.sh/), [Biome](https://biomejs.dev/), [Knip](https://knip.dev/), [Vitest](https://vitest.dev/), [Playwright](https://playwright.dev/)
 
 ---
 
@@ -56,18 +56,18 @@ bun run dev
 
 ---
 
-## 🏗️ Architecture (Feature-Sliced Design)
+## 🏗️ Architecture (Bulletproof React)
 
-The codebase strictly adheres to **Feature-Sliced Design (FSD)**:
+The codebase follows the **Bulletproof React** architecture:
 
 ```text
 src/
-├── app/         # Router configuration, root routes, global styles
-├── pages/       # Composite page views (e.g. HomePage)
-├── widgets/     # Independent UI blocks (e.g. PostFeed)
-├── features/    # User actions and interactive units (e.g. PostCreateForm, SessionPanel)
-├── entities/    # Domain models and business logic (e.g. Post)
-└── shared/      # Infrastructure, D1/Drizzle database, auth client/server, UI primitives
+├── app/         # Router configuration, route definitions, global styles
+├── features/    # Feature modules co-locating components, api/functions, queries, and types
+│   ├── auth/    # Auth components (SessionPanel), server auth functions & bindings, client
+│   └── posts/   # Post list, form, server functions, queries, and types
+├── components/  # Shared UI primitives (Button, Input, Card, Badge, Separator) and layouts
+└── shared/      # Infrastructure, D1/Drizzle database, error middleware, and utilities
 ```
 
 ---
@@ -81,7 +81,6 @@ src/
 - `bun run check:fix` - Apply Biome safe and unsafe fixes
 - `bun run check:ci` - Read-only Biome CI checks
 - `bun run check:types` - TypeScript type checking
-- `bun run check:architecture` - Validate FSD rules with Steiger
 - `bun run check:knip` - Find unused code and exports
 - `bun run format` - Format files with Biome
 - `bun run lint` - Run Biome lint without changing files

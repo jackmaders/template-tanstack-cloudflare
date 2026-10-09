@@ -6,7 +6,10 @@ export const rolldownOptions: RolldownOptions = {
 	},
 	output: {
 		codeSplitting: {
-			groups: [{ name: "zod", test: /node_modules\/zod/ }],
+			groups: [
+				{ name: "zod", test: /node_modules\/zod/ },
+				{ name: "react-vendor", test: /node_modules\/(react|react-dom)/ },
+			],
 		},
 	},
 };

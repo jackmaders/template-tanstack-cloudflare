@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AdminWorkspace } from "@/widgets/admin-workspace";
+import { AdminWorkspace } from "@/components/admin-workspace";
 
 export const Route = createFileRoute("/admin/")({
 	component: AdminWorkspace,

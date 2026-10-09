@@ -6,7 +6,7 @@ import {
 } from "@tanstack/react-router";
 import { useEffect } from "react";
 
-import { NotFoundPage } from "@/pages/not-found";
+import { NotFoundPage } from "@/components/not-found-page";
 import appCss from "../styles/index.css?url";
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
