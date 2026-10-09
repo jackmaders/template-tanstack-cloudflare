@@ -49,10 +49,7 @@ jobs:
         env:
           PRODUCTION_URL: ${{ vars.PRODUCTION_URL }}
         run: |
-          case "$PRODUCTION_URL" in
-            https://*) ;;
-            *) echo "::error::Set PRODUCTION_URL to an HTTPS production URL in the production environment."; exit 1 ;;
-          esac
+          node -e 'try { const url = new URL(process.env.PRODUCTION_URL); if (url.protocol !== "https:" || !url.hostname || url.username || url.password) throw new Error(); } catch { console.error("::error::Set PRODUCTION_URL to a valid HTTPS production URL in the production environment."); process.exit(1); }'
           printf 'production-url=%s\n' "$PRODUCTION_URL" >> "$GITHUB_OUTPUT"
 
       - name: ✅ Verify Successful CI for This Commit
