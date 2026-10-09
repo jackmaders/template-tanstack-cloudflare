@@ -25,15 +25,18 @@ WHERE NOT EXISTS (
 	SELECT 1 FROM user WHERE email = 'admin@example.com'
 );
 
+DELETE FROM account WHERE id = 'seed-admin-account-id';
+
 INSERT INTO account (id, account_id, provider_id, user_id, password, created_at, updated_at)
 SELECT
 	'seed-admin-account-id',
-	'admin@example.com',
+	'seed-admin-user-id',
 	'credential',
 	'seed-admin-user-id',
 	'4cab2d8d7dcdb06a67bafcb263e4caef:b37f0de3d95938407b724b7e8ba7cd717dd29da15ea2c59cecde422df7ae0ae1d39e1601430cd7ea2de98d9fa78cd632513247b0b7c1203ebac3de587ed1c8ea',
 	cast(unixepoch('subsecond') * 1000 as integer),
 	cast(unixepoch('subsecond') * 1000 as integer)
 WHERE NOT EXISTS (
-	SELECT 1 FROM account WHERE account_id = 'admin@example.com'
+	SELECT 1 FROM account
+	WHERE account_id = 'seed-admin-user-id' AND provider_id = 'credential'
 );
