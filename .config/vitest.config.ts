@@ -34,7 +34,6 @@ export default defineConfig({
 				"**/__mocks__/**",
 				"**/index*.ts",
 				"src/app/**",
-				"src/cloudflare-env.d.ts",
 				"src/db/**",
 				"src/shared/auth/**",
 			],
