@@ -1,6 +1,6 @@
 import { desc } from "drizzle-orm";
-import { posts } from "@/shared/db";
-import { getDb } from "@/shared/db/index.server";
+import { posts } from "@/db";
+import { getDb } from "@/db/index.server";
 import { postSelectSchema } from "../types/post-validation";
 
 export async function postListHandler(db = getDb()) {

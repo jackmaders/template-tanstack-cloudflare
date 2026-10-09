@@ -7,6 +7,7 @@ This document defines the repository's coding standards and design heuristics.
 ## 1. Architectural Alignment
 
 - **Features-First Placement:** Reusable domain logic and user interactions live in feature directories (`src/features/{feature-name}/`), containing their components, api/functions, queries/mutations, and types. Shared UI primitives live in `src/components/`, and route compositions live in `src/app/routes/`.
+- **Database Boundary:** Database schemas, clients, seeds, and database test support live in the top-level `src/db/` module. Feature modules import database capabilities from this boundary; the database module does not depend on features.
 - **Deep Modules with Substantial Implementation:** Design modules that encapsulate meaningful complexity behind a clean, cohesive interface. Keep policy orchestration and step execution together unless they change for different reasons or serve distinct consumers.
 - **Translate at the Border:** Third-party vendor payloads, external schemas, and untyped I/O must be parsed into validated domain types at the adapter boundary. Never leak external vendor schemas into core domain interfaces.
 - **Insulate Volatile Dependencies Only:** Stable, type-safe ecosystem libraries (e.g. Drizzle, Zod, TanStack Router) should be used directly. Wrap only volatile, proprietary, or un-typed external SDKs.

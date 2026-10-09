@@ -1,7 +1,7 @@
 // biome-ignore-all lint/security/noSecrets: Test mock environment contains simulated dev secrets.
 // biome-ignore-all lint/style/useNamingConvention: Cloudflare worker bindings adhere to UPPERCASE environment variable convention.
 
-import { createTestDatabase, type D1TestSession } from "@/test/d1-database";
+import { createTestDatabase, type D1TestSession } from "@/db/test/d1-database";
 
 export const testDbSession: D1TestSession = await createTestDatabase();
 

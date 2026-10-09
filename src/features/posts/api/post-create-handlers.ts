@@ -1,5 +1,5 @@
-import { posts } from "@/shared/db";
-import { getDb } from "@/shared/db/index.server";
+import { posts } from "@/db";
+import { getDb } from "@/db/index.server";
 import { postInsertSchema, postSelectSchema } from "../types/post-validation";
 
 export async function postCreateHandler(data: unknown, db = getDb()) {

@@ -6,8 +6,8 @@ import {
 	expect,
 	test,
 } from "vitest";
-import { posts, user } from "@/shared/db";
-import { createTestDatabase, type D1TestSession } from "@/test/d1-database";
+import { posts, user } from "@/db";
+import { createTestDatabase, type D1TestSession } from "@/db/test/d1-database";
 import { postListHandler } from "../api/post-handlers";
 
 describe("postListHandler", () => {

@@ -46,7 +46,7 @@ bun run db:migrate
 bun run db:seed
 ```
 
-These commands create Wrangler's local D1 database, apply the checked-in migrations, and insert the two sample posts. Run them again after adding migrations; seeding can be repeated safely.
+These commands create Wrangler's local D1 database, apply the checked-in migrations, and seed two sample posts plus the `admin@example.com` admin user and its credential account. Run them again after adding migrations; seeding can be repeated safely.
 
 ### 5. Start the app
 
@@ -66,8 +66,9 @@ src/
 ├── features/    # Feature modules co-locating components, api/functions, queries, and types
 │   ├── auth/    # Auth components (SessionPanel), server auth functions & bindings, client
 │   └── posts/   # Post list, form, server functions, queries, and types
+├── db/          # D1/Drizzle schema, database access, seed, and database test support
 ├── components/  # Shared UI primitives (Button, Input, Card, Badge, Separator) and layouts
-└── shared/      # Infrastructure, D1/Drizzle database, error middleware, and utilities
+└── shared/      # Error middleware and reusable utilities
 ```
 
 ---
