@@ -9,7 +9,6 @@ type MutationOptions = {
 };
 
 vi.mock("@tanstack/react-query");
-vi.mock("@tanstack/react-start");
 vi.mock("../api/post-create.functions");
 
 describe("usePostCreateMutation", () => {

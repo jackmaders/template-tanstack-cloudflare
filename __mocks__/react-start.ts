@@ -31,5 +31,6 @@ vi.mock("@tanstack/react-start", async (importOriginal) => {
 			return builder;
 		},
 		createServerOnlyFn: (fn: unknown) => fn,
+		useServerFn: (fn: unknown) => fn,
 	};
 });

@@ -1,9 +1,10 @@
-import { execFileSync } from "node:child_process";
 import type { Page } from "@playwright/test";
 import { expect, test } from "./fixtures";
 import { setTestClientIp } from "./test-client";
 
 const password = "e2e-password-123";
+const adminPassword = "e2e-admin-password-123";
+const adminEmail = "admin@example.com";
 const homeUrlPattern = /\/$/;
 
 test("anonymous visitors cannot enter the Admin workspace", async ({
@@ -24,16 +25,7 @@ test("regular Users cannot enter the Admin workspace", async ({ page }) => {
 });
 
 test("Admins can enter the Admin workspace", async ({ page }) => {
-	// biome-ignore lint/suspicious/noSkippedTests: remote deployments cannot be promoted through local D1.
-	test.skip(
-		Boolean(process.env.E2E_BASE_URL),
-		"The Admin role promotion uses the local D1 database.",
-	);
-
-	const email = `e2e-admin-${crypto.randomUUID()}@example.com`;
-
-	await signUp(page, email);
-	promoteToAdmin(email);
+	await signInAsAdmin(page);
 	await page.goto("/admin");
 
 	await expect(
@@ -56,23 +48,21 @@ async function signUp(page: Page, email: string) {
 	await expect(page.getByText("Signed in", { exact: true })).toBeVisible();
 }
 
-function promoteToAdmin(email: string) {
-	execFileSync(
-		"bun",
-		[
-			"x",
-			"wrangler",
-			"d1",
-			"execute",
-			"DB",
-			"--local",
-			"--persist-to",
-			".wrangler/state",
-			"-c",
-			".config/wrangler.json",
-			"--command",
-			`UPDATE user SET role = 'admin' WHERE email = '${email}';`,
-		],
-		{ stdio: "pipe" },
+async function signInAsAdmin(page: Page) {
+	await setTestClientIp(page);
+	await page.goto("/");
+	await page.locator('html[data-hydrated="true"]').waitFor();
+	await expect(page.getByText("Authentication")).toBeVisible();
+	await page.getByLabel("Email").fill(adminEmail);
+	await page.getByLabel("Password").fill(adminPassword);
+
+	const signInResponsePromise = page.waitForResponse(
+		(response) =>
+			new URL(response.url()).pathname === "/api/auth/sign-in/email" &&
+			response.request().method() === "POST",
 	);
+	await page.getByRole("button", { name: "Sign in" }).click();
+	const signInResponse = await signInResponsePromise;
+	expect(signInResponse.ok()).toBe(true);
+	await expect(page.getByText("Signed in", { exact: true })).toBeVisible();
 }
