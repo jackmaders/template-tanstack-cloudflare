@@ -5,7 +5,7 @@ export default defineConfig({
 		tsconfigPaths: true,
 		alias: {
 			"cloudflare:workers": new URL(
-				"../__mocks__/cloudflare/workers.ts",
+				"../src/test/cloudflare-workers.ts",
 				import.meta.url,
 			).pathname,
 		},
@@ -29,8 +29,10 @@ export default defineConfig({
 				"**/__mocks__/**",
 				"**/index*.ts",
 				"src/app/**",
+				"src/cloudflare-env.d.ts",
 				"src/shared/db/**",
 				"src/shared/auth/**",
+				"src/test/**",
 			],
 			thresholds: {
 				lines: 100,

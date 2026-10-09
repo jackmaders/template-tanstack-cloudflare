@@ -80,6 +80,22 @@ describe("PostCreateForm", () => {
 		expect(usePostCreateMutation().mutateAsync).not.toHaveBeenCalled();
 	});
 
+	test("does not submit when session check is pending", async () => {
+		const user = userEvent.setup();
+		const { container } = renderPostCreateForm({ isSessionPending: true });
+
+		const input = screen.getByLabelText("Post name");
+		await user.type(input, "Pending session post");
+
+		const form = container.querySelector("form");
+		if (form) {
+			const { fireEvent } = await import("@testing-library/react");
+			fireEvent.submit(form);
+		}
+
+		expect(usePostCreateMutation().mutateAsync).not.toHaveBeenCalled();
+	});
+
 	test("renders pending state when mutation is pending", () => {
 		vi.mocked(usePostCreateMutation).mockReturnValueOnce({
 			isPending: true,

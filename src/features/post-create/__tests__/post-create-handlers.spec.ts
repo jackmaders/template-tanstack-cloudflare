@@ -1,26 +1,33 @@
-import { afterEach, describe, expect, test, vi } from "vitest";
-import { createMockDatabase } from "../../../../__mocks__/drizzle";
+import {
+	afterAll,
+	beforeAll,
+	beforeEach,
+	describe,
+	expect,
+	test,
+} from "vitest";
+import { createTestDatabase, type D1TestSession } from "@/test/d1-database";
 import { postCreateHandler } from "../api/post-create-handlers";
 
-vi.mock("@/shared/db/index.server", () => ({ getDb: vi.fn() }));
-
 describe("postCreateHandler", () => {
-	const sessions: Array<ReturnType<typeof createMockDatabase>> = [];
+	let session: D1TestSession;
 
-	afterEach(() => {
-		for (const session of sessions.splice(0)) {
-			session.close();
-		}
+	beforeAll(async () => {
+		session = await createTestDatabase();
+	});
+
+	afterAll(async () => {
+		await session.close();
+	});
+
+	beforeEach(async () => {
+		await session.clearTables();
 	});
 
 	test("inserts a post and returns the created record", async () => {
-		const session = createMockDatabase();
-		sessions.push(session);
-
 		const result = await postCreateHandler(
 			{ name: "Brand New Post" },
-			// biome-ignore lint/nursery/noUnsafeTypeAssertion: the in-memory SQLite driver replaces the D1 driver in this unit test.
-			session.db as never,
+			session.db,
 		);
 
 		expect(result).toMatchObject({
@@ -31,15 +38,8 @@ describe("postCreateHandler", () => {
 	});
 
 	test("throws validation error for invalid input", async () => {
-		const session = createMockDatabase();
-		sessions.push(session);
-
 		await expect(
-			postCreateHandler(
-				{ name: 123 },
-				// biome-ignore lint/nursery/noUnsafeTypeAssertion: the in-memory SQLite driver replaces the D1 driver in this unit test.
-				session.db as never,
-			),
+			postCreateHandler({ name: 123 }, session.db),
 		).rejects.toThrow();
 	});
 });

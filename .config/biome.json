@@ -11,6 +11,7 @@
 		"includes": [
 			"**",
 			"!!**/dist",
+			"!!**/coverage",
 			"!!**/.agents",
 			"!!**/.wrangler",
 			"!!**/test-results",

@@ -14,7 +14,13 @@ vi.mock("@tanstack/react-start", async (importOriginal) => {
 			} = {
 				options,
 				middleware: () => builder,
-				validator: () => builder,
+				validator: (v: unknown) => {
+					if (typeof v === "function") {
+						// biome-ignore lint/nursery/noUnsafeTypeAssertion: dummy invocation to execute validator in tests
+						v({} as never);
+					}
+					return builder;
+				},
 				handler: (h: (...args: unknown[]) => unknown) => {
 					const fn = (...args: unknown[]) => h(...args);
 					// biome-ignore lint/nursery/noUnsafeTypeAssertion: test handler attachment

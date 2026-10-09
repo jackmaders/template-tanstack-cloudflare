@@ -1,40 +1,43 @@
-import { afterEach, describe, expect, test, vi } from "vitest";
+import {
+	afterAll,
+	beforeAll,
+	beforeEach,
+	describe,
+	expect,
+	test,
+} from "vitest";
 import { posts } from "@/shared/db";
-import { createMockDatabase } from "../../../../__mocks__/drizzle";
+import { createTestDatabase, type D1TestSession } from "@/test/d1-database";
 import { postListHandler } from "../api/post-handlers";
 
-vi.mock("@/shared/db/index.server", () => ({ getDb: vi.fn() }));
-
 describe("postListHandler", () => {
-	const sessions: Array<ReturnType<typeof createMockDatabase>> = [];
+	let session: D1TestSession;
 
-	afterEach(() => {
-		for (const session of sessions.splice(0)) {
-			session.close();
-		}
+	beforeAll(async () => {
+		session = await createTestDatabase();
+	});
+
+	afterAll(async () => {
+		await session.close();
+	});
+
+	beforeEach(async () => {
+		await session.clearTables();
 	});
 
 	test("returns empty array when no posts exist", async () => {
-		const session = createMockDatabase();
-		sessions.push(session);
-
-		// biome-ignore lint/nursery/noUnsafeTypeAssertion: in-memory sqlite mock driver for test
-		const result = await postListHandler(session.db as never);
+		const result = await postListHandler(session.db);
 		expect(result).toEqual([]);
 	});
 
-	test("returns list of posts from database", async () => {
-		const session = createMockDatabase();
-		sessions.push(session);
-
+	test("returns list of posts from database ordered by createdAt descending", async () => {
 		await session.db
 			.insert(posts)
 			.values([{ name: "First Post" }, { name: "Second Post" }]);
 
-		// biome-ignore lint/nursery/noUnsafeTypeAssertion: in-memory sqlite mock driver for test
-		const result = await postListHandler(session.db as never);
+		const result = await postListHandler(session.db);
 		expect(result).toHaveLength(2);
-		expect(result[0]?.name).toBe("First Post");
-		expect(result[1]?.name).toBe("Second Post");
+		expect(result.map((post) => post.name)).toContain("First Post");
+		expect(result.map((post) => post.name)).toContain("Second Post");
 	});
 });

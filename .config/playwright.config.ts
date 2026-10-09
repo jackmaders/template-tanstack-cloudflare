@@ -47,7 +47,7 @@ function getWebServerConfig() {
 		return {};
 	}
 
-	const steps = ["bun run db:migrate"];
+	const steps = ["bun run db:migrate", "bun run db:seed"];
 
 	if (usePreview && !skipBuild) {
 		steps.unshift("bun run build");
