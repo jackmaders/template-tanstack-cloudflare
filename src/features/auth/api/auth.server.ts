@@ -7,31 +7,8 @@ import { tanstackStartCookies } from "better-auth/tanstack-start";
 import { account, rateLimit, session, user, verification } from "@/shared/db";
 import { getDb } from "@/shared/db/index.server";
 
-export function resolveAuthBaseUrl(
-	request?: {
-		headers?: Headers | { get(name: string): string | null };
-		url?: string;
-	},
-	fallbackUrl = env.BETTER_AUTH_URL,
-): string {
-	if (request) {
-		const origin = request.headers?.get("origin");
-		if (origin) {
-			return origin;
-		}
-		if (request.url) {
-			try {
-				return new URL(request.url).origin;
-			} catch {
-				// fall through to fallbackUrl
-			}
-		}
-	}
-	return fallbackUrl;
-}
-
 export const auth = betterAuth({
-	baseURL: (request) => resolveAuthBaseUrl(request),
+	baseURL: env.BETTER_AUTH_URL,
 	database: drizzleAdapter(getDb(), {
 		provider: "sqlite",
 		schema: { account, rateLimit, session, user, verification },

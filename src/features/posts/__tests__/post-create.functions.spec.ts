@@ -20,14 +20,19 @@ describe("postCreateServerFn", () => {
 		};
 		vi.mocked(postCreateHandler).mockResolvedValueOnce(mockCreated);
 
-		const result = await postCreateServerFn({
+		// biome-ignore lint/nursery/noUnsafeTypeAssertion: test invocation of serverFn handler with injected auth middleware context
+		const serverFn = postCreateServerFn as unknown as (args: {
+			data: { name: string };
+			context: { session: { user: { id: string } } };
+		}) => Promise<typeof mockCreated>;
+
+		const result = await serverFn({
 			data: { name: "New Post" },
 			context: {
 				session: {
 					user: { id: "user-123" },
 				},
-				// biome-ignore lint/nursery/noUnsafeTypeAssertion: mock context injected by authMiddleware
-			} as never,
+			},
 		});
 
 		expect(postCreateHandler).toHaveBeenCalledWith({
