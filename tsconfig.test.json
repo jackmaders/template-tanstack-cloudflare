@@ -1,0 +1,21 @@
+{
+	"extends": "./tsconfig.json",
+	"exclude": [],
+	"include": [
+		".config/**/*.ts",
+		"__mocks__/**/*.ts",
+		"e2e/**/*.ts",
+		"src/**/*.ts",
+		"src/**/*.tsx"
+	],
+	"compilerOptions": {
+		"types": [
+			"vite/client",
+			"vitest/globals",
+			"bun",
+			"node",
+			"@cloudflare/workers-types",
+			"@testing-library/jest-dom/vitest"
+		]
+	}
+}

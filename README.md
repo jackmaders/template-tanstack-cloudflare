@@ -19,7 +19,7 @@ A production-ready full-stack template powered by **TanStack Start**, **Cloudfla
 
 ### 1. Prerequisites
 
-- [Bun](https://bun.sh/) (v1.2+)
+- [Bun](https://bun.sh/) (v1.4.2+)
 - OpenSSL to generate a local auth secret (or another secure random generator)
 
 A Cloudflare account is only needed for deployment. Wrangler runs the local D1 database without creating a remote database.
