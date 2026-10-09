@@ -2,8 +2,6 @@ export {
 	account,
 	rateLimit,
 	session,
-	USER_ROLES,
-	type UserRole,
 	user,
 	verification,
 } from "./schema/auth";
