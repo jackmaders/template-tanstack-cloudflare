@@ -35,4 +35,31 @@ describe("postListHandler", () => {
 		expect(result[0]?.name).toBe("First Post");
 		expect(result[1]?.name).toBe("Second Post");
 	});
+
+	test("supports relational queries with author relation via db.query", async () => {
+		const session = createMockDatabase();
+		sessions.push(session);
+
+		const { user: userTable } = await import("@/shared/db");
+		await session.db.insert(userTable).values({
+			id: "user-test-1",
+			name: "Alice",
+			email: "alice@example.com",
+		});
+
+		await session.db.insert(posts).values({
+			name: "Relational Post",
+			authorId: "user-test-1",
+		});
+
+		const result = await session.db.query.posts.findMany({
+			with: {
+				author: true,
+			},
+		});
+
+		expect(result).toHaveLength(1);
+		expect(result[0]?.name).toBe("Relational Post");
+		expect(result[0]?.author?.name).toBe("Alice");
+	});
 });

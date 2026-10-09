@@ -5,7 +5,14 @@ import { PostCard } from "../components/post-card";
 describe("PostCard", () => {
 	test("renders post name", () => {
 		render(
-			<PostCard post={{ id: 1, name: "Sample Post", createdAt: new Date() }} />,
+			<PostCard
+				post={{
+					id: 1,
+					name: "Sample Post",
+					authorId: null,
+					createdAt: new Date(),
+				}}
+			/>,
 		);
 
 		expect(screen.getByText("Sample Post")).toBeInTheDocument();

@@ -1,10 +1,11 @@
 import Database from "better-sqlite3";
 import { sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/better-sqlite3";
+import { postRelations } from "../src/shared/db";
 
 export interface MockDatabaseSession {
 	close: () => void;
-	db: ReturnType<typeof drizzle>;
+	db: ReturnType<typeof drizzle<typeof postRelations>>;
 	sqlite: InstanceType<typeof Database>;
 }
 
@@ -15,7 +16,7 @@ export interface MockDatabaseSession {
  */
 export function createMockDatabase(): MockDatabaseSession {
 	const sqlite = new Database(":memory:");
-	const db = drizzle({ client: sqlite });
+	const db = drizzle({ client: sqlite, relations: postRelations });
 
 	// Initialize tables using drizzle db.run
 	db.run(sql`
@@ -86,6 +87,7 @@ export function createMockDatabase(): MockDatabaseSession {
 		CREATE TABLE IF NOT EXISTS posts (
 			id INTEGER PRIMARY KEY AUTOINCREMENT,
 			name TEXT NOT NULL,
+			author_id TEXT REFERENCES user(id) ON DELETE CASCADE,
 			created_at INTEGER NOT NULL DEFAULT (cast(unixepoch('subsecond') * 1000 as integer))
 		)
 	`);

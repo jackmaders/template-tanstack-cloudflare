@@ -1,0 +1,1 @@
+ALTER TABLE `posts` ADD `author_id` text REFERENCES user(id) ON DELETE CASCADE;

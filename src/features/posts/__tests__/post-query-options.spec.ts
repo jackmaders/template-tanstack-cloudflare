@@ -11,7 +11,7 @@ describe("postListQueryOptions", () => {
 		expect(postListQueryOptions.staleTime).toBe(30_000);
 
 		vi.mocked(postListServerFn).mockResolvedValueOnce([
-			{ id: 1, name: "Sample", createdAt: new Date() },
+			{ id: 1, name: "Sample", authorId: null, createdAt: new Date() },
 		]);
 
 		expect(postListQueryOptions.queryFn).toBeDefined();

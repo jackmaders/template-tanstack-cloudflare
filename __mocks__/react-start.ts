@@ -6,19 +6,25 @@ vi.mock("@tanstack/react-start", async (importOriginal) => {
 	return {
 		...actual,
 		createServerFn: (options?: unknown) => {
-			const builder: {
+			type MockServerFnBuilder = {
 				options?: unknown;
-				middleware: (m: unknown) => typeof builder;
-				validator: (v: unknown) => typeof builder;
+				validatorFn?: unknown;
+				middleware: (m: unknown) => MockServerFnBuilder;
+				validator: (v: unknown) => MockServerFnBuilder;
 				handler: (h: (...args: unknown[]) => unknown) => unknown;
-			} = {
+			};
+			const builder: MockServerFnBuilder = {
 				options,
 				middleware: () => builder,
-				validator: () => builder,
+				validator: (v: unknown) => {
+					builder.validatorFn = v;
+					return builder;
+				},
 				handler: (h: (...args: unknown[]) => unknown) => {
-					const fn = (...args: unknown[]) => h(...args);
-					// biome-ignore lint/nursery/noUnsafeTypeAssertion: test handler attachment
-					(fn as unknown as { handler: typeof h }).handler = h;
+					const fn = Object.assign((...args: unknown[]) => h(...args), {
+						handler: h,
+						validator: builder.validatorFn,
+					});
 					return fn;
 				},
 			};
