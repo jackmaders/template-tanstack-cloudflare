@@ -51,9 +51,8 @@ async function signUp(page: Page, email: string) {
 async function signInAsAdmin(page: Page) {
 	await setTestClientIp(page);
 	await page.goto("/");
-	await page
-		.getByRole("button", { name: "Already have an account? Sign in" })
-		.click();
+	await page.locator('html[data-hydrated="true"]').waitFor();
+	await expect(page.getByText("Authentication")).toBeVisible();
 	await page.getByLabel("Email").fill(adminEmail);
 	await page.getByLabel("Password").fill(adminPassword);
 
