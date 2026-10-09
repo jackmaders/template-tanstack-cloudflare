@@ -33,10 +33,8 @@ export default defineConfig({
 				"**/__mocks__/**",
 				"**/index*.ts",
 				"src/app/**",
-				"src/cloudflare-env.d.ts",
 				"src/shared/db/**",
 				"src/shared/auth/**",
-				"src/features/posts/types/post-types.ts",
 			],
 			thresholds: {
 				lines: 100,

@@ -32,7 +32,7 @@ src/
 bun install
 bun run dev
 bun run check:types
-bun run test # Vitest with 100% coverage thresholds; reports go to coverage/
+bun run test
 bun run build
 ```
 
