@@ -2,24 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, test, vi } from "vitest";
 import { PostCreateForm } from "../ui/post-create-form-lazy";
 
-vi.mock("../ui/post-create-form", () => ({
-	// biome-ignore lint/style/useNamingConvention: the mock must match the component export.
-	PostCreateForm: ({
-		isAuthenticated,
-		isSessionPending,
-	}: {
-		isAuthenticated: boolean;
-		isSessionPending: boolean;
-	}) => (
-		<div
-			data-authenticated={String(isAuthenticated)}
-			data-session-pending={String(isSessionPending)}
-			data-testid="real-post-create-form"
-		>
-			Loaded Post Create Form
-		</div>
-	),
-}));
+vi.mock("../ui/post-create-form");
 
 describe("Lazy PostCreateForm", () => {
 	test("renders loaded PostCreateForm component", async () => {

@@ -1,17 +1,12 @@
 import { notFound, redirect } from "@tanstack/react-router";
 import { setResponseStatus } from "@tanstack/react-start/server";
 import { describe, expect, test, vi } from "vitest";
+import { reportServerError } from "../report-server-error";
 import { serverErrorMiddleware } from "../server-error-middleware";
 import { ServerFunctionError } from "../server-function-error";
 
-vi.mock("@tanstack/react-start/server", () => ({
-	setResponseStatus: vi.fn(),
-}));
-
-const reportServerErrorMock = vi.fn();
-vi.mock("../report-server-error", () => ({
-	reportServerError: (...args: unknown[]) => reportServerErrorMock(...args),
-}));
+vi.mock("@tanstack/react-start/server");
+vi.mock("../report-server-error");
 
 describe("serverErrorMiddleware", () => {
 	// biome-ignore lint/nursery/noUnsafeTypeAssertion: accessing server middleware handler
@@ -37,7 +32,7 @@ describe("serverErrorMiddleware", () => {
 			}),
 		).rejects.toBe(redirectErr);
 
-		expect(reportServerErrorMock).not.toHaveBeenCalled();
+		expect(vi.mocked(reportServerError)).not.toHaveBeenCalled();
 		expect(setResponseStatus).not.toHaveBeenCalled();
 	});
 
@@ -51,7 +46,7 @@ describe("serverErrorMiddleware", () => {
 			}),
 		).rejects.toBe(notFoundErr);
 
-		expect(reportServerErrorMock).not.toHaveBeenCalled();
+		expect(vi.mocked(reportServerError)).not.toHaveBeenCalled();
 		expect(setResponseStatus).not.toHaveBeenCalled();
 	});
 
@@ -67,7 +62,7 @@ describe("serverErrorMiddleware", () => {
 		).rejects.toBe(err);
 
 		expect(setResponseStatus).toHaveBeenCalledWith(403, "Forbidden");
-		expect(reportServerErrorMock).toHaveBeenCalledWith(err, "testFn");
+		expect(vi.mocked(reportServerError)).toHaveBeenCalledWith(err, "testFn");
 	});
 
 	test("uses 'unknown' as default function name if serverFnMeta is not provided", async () => {
@@ -80,6 +75,6 @@ describe("serverErrorMiddleware", () => {
 			}),
 		).rejects.toBe(err);
 
-		expect(reportServerErrorMock).toHaveBeenCalledWith(err, "unknown");
+		expect(vi.mocked(reportServerError)).toHaveBeenCalledWith(err, "unknown");
 	});
 });

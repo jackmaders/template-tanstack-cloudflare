@@ -3,9 +3,7 @@ import { describe, expect, test, vi } from "vitest";
 import { postListServerFn } from "../api/post.functions";
 import { postListQueryOptions } from "../api/post-query-options";
 
-vi.mock("../api/post.functions", () => ({
-	postListServerFn: vi.fn(),
-}));
+vi.mock("../api/post.functions");
 
 describe("postListQueryOptions", () => {
 	test("defines queryKey and queryFn correctly", async () => {

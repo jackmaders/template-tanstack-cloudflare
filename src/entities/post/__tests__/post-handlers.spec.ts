@@ -1,9 +1,7 @@
-import { afterEach, describe, expect, test, vi } from "vitest";
+import { afterEach, describe, expect, test } from "vitest";
 import { posts } from "@/shared/db";
 import { createMockDatabase } from "../../../../__mocks__/drizzle";
 import { postListHandler } from "../api/post-handlers";
-
-vi.mock("@/shared/db/index.server", () => ({ getDb: vi.fn() }));
 
 describe("postListHandler", () => {
 	const sessions: Array<ReturnType<typeof createMockDatabase>> = [];

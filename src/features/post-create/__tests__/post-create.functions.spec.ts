@@ -2,13 +2,8 @@ import { describe, expect, test, vi } from "vitest";
 import { postCreateServerFn } from "../api/post-create.functions";
 import { postCreateHandler } from "../api/post-create-handlers";
 
-vi.mock("../api/post-create-handlers", () => ({
-	postCreateHandler: vi.fn(),
-}));
-
-vi.mock("@/shared/auth", () => ({
-	authMiddleware: vi.fn(),
-}));
+vi.mock("../api/post-create-handlers");
+vi.mock("@/shared/auth");
 
 describe("postCreateServerFn", () => {
 	test("calls postCreateHandler with provided data", async () => {

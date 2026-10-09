@@ -1,6 +1,6 @@
 language js
 
-`$fn($...)` as $call where {
+`$fn($mod, $factory, $...)` as $call where {
 	$fn <: or {
 		`vi.mock`,
 		`vi.doMock`
