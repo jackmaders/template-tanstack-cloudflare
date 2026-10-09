@@ -4,8 +4,13 @@ export default defineConfig({
 	resolve: {
 		tsconfigPaths: true,
 		alias: {
+			"@": new URL("../src", import.meta.url).pathname,
+			"better-auth/react": new URL(
+				"../__mocks__/better-auth/react.ts",
+				import.meta.url,
+			).pathname,
 			"cloudflare:workers": new URL(
-				"./test/cloudflare-workers.ts",
+				"../__mocks__/cloudflare-workers.ts",
 				import.meta.url,
 			).pathname,
 		},
