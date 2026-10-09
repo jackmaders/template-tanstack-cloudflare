@@ -12,8 +12,8 @@ describe("PostFeed", () => {
 		render(
 			<PostFeed
 				posts={[
-					{ id: 1, name: "Post 1", createdAt: new Date() },
-					{ id: 2, name: "Post 2", createdAt: new Date() },
+					{ id: 1, name: "Post 1", authorId: null, createdAt: new Date() },
+					{ id: 2, name: "Post 2", authorId: null, createdAt: new Date() },
 				]}
 			/>,
 		);

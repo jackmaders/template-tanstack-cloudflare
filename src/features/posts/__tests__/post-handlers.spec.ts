@@ -6,7 +6,7 @@ import {
 	expect,
 	test,
 } from "vitest";
-import { posts } from "@/shared/db";
+import { posts, user } from "@/shared/db";
 import { createTestDatabase, type D1TestSession } from "@/test/d1-database";
 import { postListHandler } from "../api/post-handlers";
 
@@ -39,5 +39,28 @@ describe("postListHandler", () => {
 		expect(result).toHaveLength(2);
 		expect(result.map((post) => post.name)).toContain("First Post");
 		expect(result.map((post) => post.name)).toContain("Second Post");
+	});
+
+	test("supports relational queries with author relation via db.query", async () => {
+		await session.db.insert(user).values({
+			id: "user-test-1",
+			name: "Alice",
+			email: "alice@example.com",
+		});
+
+		await session.db.insert(posts).values({
+			name: "Relational Post",
+			authorId: "user-test-1",
+		});
+
+		const result = await session.db.query.posts.findMany({
+			with: {
+				author: true,
+			},
+		});
+
+		expect(result).toHaveLength(1);
+		expect(result[0]?.name).toBe("Relational Post");
+		expect(result[0]?.author?.name).toBe("Alice");
 	});
 });

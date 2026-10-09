@@ -4,12 +4,13 @@
 import type { D1Migration } from "@cloudflare/vitest-pool-workers";
 import { drizzle } from "drizzle-orm/d1";
 import { Miniflare } from "miniflare";
+import { postRelations } from "@/shared/db";
 
 export interface D1TestSession {
 	clearTables: () => Promise<void>;
 	close: () => Promise<void>;
 	d1: D1Database;
-	db: ReturnType<typeof drizzle>;
+	db: ReturnType<typeof drizzle<typeof postRelations>>;
 }
 
 export const drizzleMigrations: D1Migration[] = [
@@ -36,6 +37,12 @@ export const drizzleMigrations: D1Migration[] = [
 		name: "20261006165509_yellow_anthem",
 		queries: [
 			"CREATE TABLE `rate_limit` (\n\t`id` text PRIMARY KEY,\n\t`key` text NOT NULL UNIQUE,\n\t`count` integer NOT NULL,\n\t`last_request` integer NOT NULL\n);\n",
+		],
+	},
+	{
+		name: "20261008172018_last_micromax",
+		queries: [
+			"ALTER TABLE `posts` ADD `author_id` text REFERENCES user(id) ON DELETE CASCADE;",
 		],
 	},
 ];
@@ -112,7 +119,7 @@ export async function createTestDatabase(): Promise<D1TestSession> {
 	// biome-ignore lint/nursery/noUnsafeTypeAssertion: Miniflare getD1Database returns authentic D1Database instance
 	const d1 = (await mf.getD1Database("DB")) as unknown as D1Database;
 	await applyD1Migrations(d1, drizzleMigrations);
-	const db = drizzle(d1);
+	const db = drizzle(d1, { relations: postRelations });
 
 	return {
 		clearTables: async () => {

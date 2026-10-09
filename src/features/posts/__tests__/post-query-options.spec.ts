@@ -3,9 +3,7 @@ import { describe, expect, test, vi } from "vitest";
 import { postListServerFn } from "../api/post.functions";
 import { postListQueryOptions } from "../api/post-query-options";
 
-vi.mock("../api/post.functions", () => ({
-	postListServerFn: vi.fn(),
-}));
+vi.mock("../api/post.functions");
 
 describe("postListQueryOptions", () => {
 	test("defines queryKey and queryFn correctly", async () => {
@@ -13,7 +11,7 @@ describe("postListQueryOptions", () => {
 		expect(postListQueryOptions.staleTime).toBe(30_000);
 
 		vi.mocked(postListServerFn).mockResolvedValueOnce([
-			{ id: 1, name: "Sample", createdAt: new Date() },
+			{ id: 1, name: "Sample", authorId: null, createdAt: new Date() },
 		]);
 
 		expect(postListQueryOptions.queryFn).toBeDefined();

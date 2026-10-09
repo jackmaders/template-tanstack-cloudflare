@@ -21,6 +21,12 @@
 			"!**/src/cloudflare-env.d.ts"
 		]
 	},
+	"plugins": [
+		{
+			"path": "./biome/plugins/no-inline-vitest-mock.grit",
+			"includes": ["**", "!**/__mocks__/**"]
+		}
+	],
 	"css": { "parser": { "tailwindDirectives": true } },
 	"linter": {
 		"domains": {
