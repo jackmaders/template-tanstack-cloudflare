@@ -4,6 +4,7 @@ export default defineConfig({
 	resolve: {
 		tsconfigPaths: true,
 		alias: {
+			"@": new URL("../src", import.meta.url).pathname,
 			"cloudflare:workers": new URL(
 				"../src/test/cloudflare-workers.ts",
 				import.meta.url,
